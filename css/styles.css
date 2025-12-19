@@ -26,33 +26,75 @@ body {
 header {
     background-color: var(--bg);
     color: var(--text);
-    height: 64px;                 /* 👈 fixed header height */
+
+    /* keep header from growing when logo grows */
+    height: 64px;
     padding: 0;
+
     position: sticky;
     top: 0;
     z-index: 100;
+
+    /* bar under header */
     border-bottom: 1px solid var(--border);
 }
 
 nav {
+    /* full-width so logo can be truly flush left */
+    width: 100%;
+    height: 100%;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1.25rem;
+
+    /* remove centering constraint */
+    max-width: none;
+    margin: 0;
+
+    /* NO left padding so logo can touch the edge */
+    padding: 0 1.25rem 0 0; /* right padding only */
 }
 
+/* Logo container */
+.logo {
+    display: flex;
+    align-items: center;
+
+    /* flush left */
+    margin: 0;
+    padding: 0;
+}
+
+/* If you still have text logo anywhere, keep it styled */
 .logo h1 {
     font-size: 1.25rem;
     font-weight: 600;
     letter-spacing: 0.2px;
+    margin: 0;
 }
 
+/* Logo image sizing (won't expand header height) */
+.logo img {
+    height: 52px;        /* change this to make it bigger/smaller */
+    max-height: 100%;    /* never exceed the fixed header height */
+    width: auto;
+    display: block;
+
+    /* flush left edge */
+    margin: 0;
+    padding: 0;
+}
+
+/* Nav links: far right, horizontal */
 .nav-links {
     display: flex;
     list-style: none;
     gap: 1.5rem;
+
+    /* keep them at the far right */
+    margin-left: auto;
+    padding: 0;
 }
 
 .nav-links a {
@@ -198,13 +240,6 @@ footer {
     padding: 2rem 1rem;
     border-top: 1px solid var(--border);
 }
-.logo img {
-    height: 120px;      /* 👈 change this number */
-    width: auto;       /* keeps proportions */
-    display: block;
-    margin-left: 10;
-}
-
 
 /* Search Section */
 .search-section {
@@ -397,6 +432,10 @@ footer {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    header {
+        height: 64px; /* keep consistent */
+    }
+
     .nav-links {
         gap: 1rem;
     }
@@ -419,5 +458,10 @@ footer {
 
     .apartment-grid {
         grid-template-columns: 1fr;
+    }
+
+    /* Slightly smaller logo on mobile so it doesn't crowd nav */
+    .logo img {
+        height: 44px;
     }
 }
