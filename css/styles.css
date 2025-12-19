@@ -206,6 +206,195 @@ footer {
 }
 
 
+/* Search Section */
+.search-section {
+    background: var(--surface);
+    padding: 3rem 1rem;
+    margin-bottom: 2rem;
+    border-radius: 12px;
+}
+
+.search-container {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.search-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.search-subtitle {
+    color: var(--muted);
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.filter-group label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+}
+
+.filter-select {
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+    background: var(--bg);
+    cursor: pointer;
+    transition: border-color 160ms ease;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--text);
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+}
+
+.search-btn {
+    background-color: var(--text);
+    color: var(--bg);
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 160ms ease, transform 160ms ease;
+    align-self: end;
+}
+
+.search-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* Results Section */
+.results-section {
+    margin-top: 2rem;
+}
+
+.results-header {
+    margin-bottom: 1.5rem;
+}
+
+.results-header h2 {
+    font-size: 1.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.results-count {
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.apartment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.apartment-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.apartment-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.apartment-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    background: var(--surface);
+}
+
+.apartment-info {
+    padding: 1.25rem;
+}
+
+.apartment-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+}
+
+.apartment-location {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+}
+
+.apartment-details {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.detail-separator {
+    color: var(--border);
+}
+
+.apartment-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 1rem;
+}
+
+.price-period {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--muted);
+}
+
+.floor-plan-link {
+    display: inline-block;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: opacity 160ms ease;
+}
+
+.floor-plan-link:hover {
+    opacity: 0.7;
+}
+
+.no-results {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--muted);
+    font-size: 1.1rem;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .nav-links {
@@ -220,4 +409,15 @@ footer {
         padding: 2rem 0;
     }
 
+    .search-container h1 {
+        font-size: 1.75rem;
+    }
+
+    .filters {
+        grid-template-columns: 1fr;
+    }
+
+    .apartment-grid {
+        grid-template-columns: 1fr;
+    }
 }

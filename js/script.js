@@ -1,61 +1,115 @@
-// Smooth scrolling for navigation links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    });
-});
+// Wait for DOM to load
+document.addEventListener('DOMContentLoaded', function() {
+    // Get filter elements
+    const priceRangeSelect = document.getElementById('priceRange');
+    const bedroomsSelect = document.getElementById('bedrooms');
+    const bathroomsSelect = document.getElementById('bathrooms');
+    const searchBtn = document.getElementById('searchBtn');
+    const apartmentGrid = document.getElementById('apartmentGrid');
+    const resultsCount = document.getElementById('resultsCount');
+    const noResults = document.getElementById('noResults');
 
-// Form submission handler
-const contactForm = document.querySelector('.contact-form');
-if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
+    // Display all apartments on page load
+    displayApartments(apartmentsData);
 
-        // Get form data
-        const formData = new FormData(this);
+    // Add event listener to search button
+    searchBtn.addEventListener('click', filterApartments);
 
-        // You can add your form submission logic here
-        console.log('Form submitted!');
+    // Also filter when any dropdown changes
+    priceRangeSelect.addEventListener('change', filterApartments);
+    bedroomsSelect.addEventListener('change', filterApartments);
+    bathroomsSelect.addEventListener('change', filterApartments);
 
-        // Example: Show success message
-        alert('Thank you for your message! We will get back to you soon.');
+    function filterApartments() {
+        const priceRange = priceRangeSelect.value;
+        const bedrooms = bedroomsSelect.value;
+        const bathrooms = bathroomsSelect.value;
 
-        // Reset form
-        this.reset();
-    });
-}
+        let filtered = apartmentsData.filter(apartment => {
+            // Filter by price
+            let priceMatch = true;
+            if (priceRange !== 'all') {
+                if (priceRange === '0-700') {
+                    priceMatch = apartment.price < 700;
+                } else if (priceRange === '700-900') {
+                    priceMatch = apartment.price >= 700 && apartment.price < 900;
+                } else if (priceRange === '900-1100') {
+                    priceMatch = apartment.price >= 900 && apartment.price < 1100;
+                } else if (priceRange === '1100-1500') {
+                    priceMatch = apartment.price >= 1100 && apartment.price < 1500;
+                } else if (priceRange === '1500+') {
+                    priceMatch = apartment.price >= 1500;
+                }
+            }
 
-// CTA Button click handler
-const ctaButton = document.querySelector('.cta-button');
-if (ctaButton) {
-    ctaButton.addEventListener('click', function() {
-        // Add your custom action here
-        console.log('CTA button clicked!');
-        // Example: scroll to contact section
-        document.querySelector('#contact').scrollIntoView({
-            behavior: 'smooth'
+            // Filter by bedrooms
+            let bedroomMatch = true;
+            if (bedrooms !== 'all') {
+                if (bedrooms === '4') {
+                    bedroomMatch = apartment.beds >= 4;
+                } else {
+                    bedroomMatch = apartment.beds === parseInt(bedrooms);
+                }
+            }
+
+            // Filter by bathrooms
+            let bathroomMatch = true;
+            if (bathrooms !== 'all') {
+                if (bathrooms === '2+') {
+                    bathroomMatch = apartment.baths >= 2;
+                } else {
+                    bathroomMatch = apartment.baths >= parseFloat(bathrooms);
+                }
+            }
+
+            return priceMatch && bedroomMatch && bathroomMatch;
         });
-    });
-}
 
-// Add scroll effect to header
-let lastScroll = 0;
-window.addEventListener('scroll', () => {
-    const header = document.querySelector('header');
-    const currentScroll = window.pageYOffset;
-
-    if (currentScroll > lastScroll && currentScroll > 100) {
-        header.style.transform = 'translateY(-100%)';
-    } else {
-        header.style.transform = 'translateY(0)';
+        displayApartments(filtered);
     }
 
-    lastScroll = currentScroll;
+    function displayApartments(apartments) {
+        // Clear current results
+        apartmentGrid.innerHTML = '';
+
+        // Update results count
+        resultsCount.textContent = `Showing ${apartments.length} apartment${apartments.length !== 1 ? 's' : ''}`;
+
+        // Show/hide no results message
+        if (apartments.length === 0) {
+            noResults.style.display = 'block';
+            apartmentGrid.style.display = 'none';
+        } else {
+            noResults.style.display = 'none';
+            apartmentGrid.style.display = 'grid';
+
+            // Create apartment cards
+            apartments.forEach(apartment => {
+                const card = createApartmentCard(apartment);
+                apartmentGrid.appendChild(card);
+            });
+        }
+    }
+
+    function createApartmentCard(apartment) {
+        const card = document.createElement('div');
+        card.className = 'apartment-card';
+
+        card.innerHTML = `
+            <img src="${apartment.imageUrl}" alt="${apartment.name}" class="apartment-image">
+            <div class="apartment-info">
+                <h3 class="apartment-name">${apartment.name}</h3>
+                <p class="apartment-location">${apartment.location}</p>
+                <div class="apartment-details">
+                    <span class="detail-item">${apartment.beds} Bed${apartment.beds > 1 ? 's' : ''}</span>
+                    <span class="detail-separator">•</span>
+                    <span class="detail-item">${apartment.baths} Bath${apartment.baths > 1 ? 's' : ''}</span>
+                </div>
+                <p class="apartment-price">$${apartment.price}<span class="price-period">/month</span></p>
+                <a href="${apartment.floorPlanUrl}" target="_blank" class="floor-plan-link">View Floor Plan →</a>
+            </div>
+        `;
+
+        return card;
+    }
 });
