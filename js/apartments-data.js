@@ -2,7 +2,7 @@
 const apartmentsData = [
     {
         id: 1,
-        name: "Copper Beech Townhomes",
+        name: "Two Bedroom - Hub Bloomington",
         location: "2650 S Walnut St, Bloomington, IN",
         price: 850,
         beds: 2,
