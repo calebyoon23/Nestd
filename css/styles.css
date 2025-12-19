@@ -202,6 +202,7 @@ footer {
     height: 120px;      /* 👈 change this number */
     width: auto;       /* keeps proportions */
     display: block;
+    margin-left: 10;
 }
 
 
