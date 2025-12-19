@@ -26,7 +26,8 @@ body {
 header {
     background-color: var(--bg);
     color: var(--text);
-    padding: 1rem 0;
+    height: 64px;                 /* 👈 fixed header height */
+    padding: 0;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -197,6 +198,12 @@ footer {
     padding: 2rem 1rem;
     border-top: 1px solid var(--border);
 }
+.logo img {
+    height: 120px;      /* 👈 change this number */
+    width: auto;       /* keeps proportions */
+    display: block;
+}
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -211,4 +218,5 @@ footer {
     section {
         padding: 2rem 0;
     }
+
 }
