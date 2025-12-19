@@ -76,7 +76,7 @@ nav {
 
 /* Logo image sizing (won't expand header height) */
 .logo img {
-    height: 52px;        /* change this to make it bigger/smaller */
+    height: 210px;        /* change this to make it bigger/smaller */
     max-height: 100%;    /* never exceed the fixed header height */
     width: auto;
     display: block;
