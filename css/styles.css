@@ -483,3 +483,348 @@ footer {
         height: 44px;
     }
 }
+
+/* ===== APARTMENT DETAIL PAGE STYLES ===== */
+
+.detail-page {
+    padding: 0;
+}
+
+/* Hero Section */
+.detail-hero {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+}
+
+.hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6));
+    display: flex;
+    align-items: flex-end;
+    padding: 2rem;
+}
+
+.hero-content {
+    color: white;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.hero-content p {
+    font-size: 1.1rem;
+    opacity: 0.95;
+}
+
+/* Container for sections */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* Reviews Section */
+.reviews-section {
+    padding: 3rem 0;
+    background: var(--bg);
+}
+
+.reviews-section h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.reviews-summary {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--surface);
+    border-radius: 8px;
+}
+
+.average-rating {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.rating-number {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.stars {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.star {
+    font-size: 1.5rem;
+    color: #e0e0e0;
+}
+
+.star.filled {
+    color: #ffc107;
+}
+
+.star.half {
+    background: linear-gradient(90deg, #ffc107 50%, #e0e0e0 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.review-count {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-left: auto;
+}
+
+.reviews-list {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.review-card {
+    background: var(--surface);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.review-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.author-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--text);
+    color: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.author-info h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.review-date {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.review-rating .stars {
+    font-size: 1rem;
+}
+
+.review-text {
+    line-height: 1.6;
+    color: var(--text);
+}
+
+/* Floor Plans Section */
+.floor-plans-section {
+    padding: 3rem 0;
+    background: var(--surface);
+}
+
+.floor-plans-section h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+    color: var(--muted);
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.floor-plan-filters {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 0.5rem 1.25rem;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 160ms ease;
+}
+
+.filter-btn:hover {
+    background: var(--surface);
+}
+
+.filter-btn.active {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+}
+
+.floor-plans-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.floor-plan-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+    position: relative;
+}
+
+.floor-plan-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.floor-plan-card.highlighted {
+    border: 2px solid var(--text);
+}
+
+.highlight-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--text);
+    color: var(--bg);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    z-index: 1;
+}
+
+.floor-plan-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    background: var(--surface);
+}
+
+.floor-plan-info {
+    padding: 1.25rem;
+}
+
+.floor-plan-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+}
+
+.floor-plan-specs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.spec-item {
+    display: block;
+}
+
+.floor-plan-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0;
+}
+
+/* Responsive Design for Detail Page */
+@media (max-width: 768px) {
+    .detail-hero {
+        height: 300px;
+    }
+
+    .hero-content h1 {
+        font-size: 1.75rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+
+    .hero-overlay {
+        padding: 1.5rem;
+    }
+
+    .reviews-section,
+    .floor-plans-section {
+        padding: 2rem 0;
+    }
+
+    .reviews-section h2,
+    .floor-plans-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .average-rating {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .review-count {
+        margin-left: 0;
+    }
+
+    .floor-plans-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .floor-plan-filters {
+        gap: 0.5rem;
+    }
+
+    .filter-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+}

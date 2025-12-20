@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Apartment details">
+    <title>Apartment Details - Nestd</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/nestd-logo.png" alt="Nestd logo" />
+                </a>
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="detail-page">
+        <!-- Hero Section -->
+        <section class="detail-hero">
+            <img id="heroImage" src="" alt="" class="hero-image">
+            <div class="hero-overlay">
+                <div class="hero-content">
+                    <h1 id="apartmentName">Loading...</h1>
+                    <p id="apartmentLocation"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reviews Section -->
+        <section class="reviews-section">
+            <div class="container">
+                <h2>Resident Reviews</h2>
+                <div class="reviews-summary">
+                    <div class="average-rating">
+                        <span id="averageRating" class="rating-number">0.0</span>
+                        <div class="stars" id="averageStars"></div>
+                        <p id="reviewCount" class="review-count">0 reviews</p>
+                    </div>
+                </div>
+                <div id="reviewsList" class="reviews-list">
+                    <!-- Reviews will be inserted here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Floor Plans Section -->
+        <section class="floor-plans-section">
+            <div class="container">
+                <h2>Available Floor Plans</h2>
+                <p class="section-subtitle">Browse through our available floor plans and find the perfect fit</p>
+
+                <!-- Floor Plan Filters -->
+                <div class="floor-plan-filters">
+                    <button class="filter-btn active" data-beds="all">All</button>
+                    <button class="filter-btn" data-beds="Studio">Studio</button>
+                    <button class="filter-btn" data-beds="1">1 Bed</button>
+                    <button class="filter-btn" data-beds="2">2 Beds</button>
+                    <button class="filter-btn" data-beds="3">3 Beds</button>
+                    <button class="filter-btn" data-beds="4">4 Beds</button>
+                    <button class="filter-btn" data-beds="5">5 Beds</button>
+                </div>
+
+                <div id="floorPlansList" class="floor-plans-grid">
+                    <!-- Floor plans will be inserted here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; Maggie R Co. All rights reserved.</p>
+    </footer>
+
+    <script src="js/apartments-data.js"></script>
+    <script src="js/apartment-detail.js"></script>
+</body>
+</html>

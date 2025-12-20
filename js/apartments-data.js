@@ -8,7 +8,158 @@ const apartmentsData = [
         beds: 4,
         baths: 4,
         floorPlanUrl: "https://thestandardbloomington.com",
-        imageUrl: "https://www.thestandardbloomington.com/wp-content/uploads/2024/01/standard-bloomington-index-hero.jpg"
+        imageUrl: "https://www.thestandardbloomington.com/wp-content/uploads/2024/01/standard-bloomington-index-hero.jpg",
+        hasDetailPage: true,
+        floorPlans: [
+            {
+                id: 1,
+                name: "Dawson",
+                beds: 4,
+                baths: 4,
+                price: 1245,
+                sqft: 1430,
+                imageUrl: "https://landmarkportfolio.jumpem.host/wp-content/uploads/2024/01/Dawson.jpg"
+            },
+            {
+                id: 2,
+                name: "Savin",
+                beds: "Studio",
+                baths: "Studio",
+                price: 1785,
+                sqft: 441,
+                imageUrl: "https://landmarkportfolio.jumpem.host/wp-content/uploads/2024/01/Savin-1.jpg"
+            },
+            {
+                id: 3,
+                name: "Arden",
+                beds: 1,
+                baths: 1,
+                price: 2050,
+                sqft: 564,
+                imageUrl: "https://landmarkportfolio.jumpem.host/wp-content/uploads/2024/01/Arden-1.jpg"
+            },
+            {
+                id: 4,
+                name: "Ardmore",
+                beds: 1,
+                baths: 1,
+                price: 1187,
+                sqft: "415-438",
+                imageUrl: "https://landmarkportfolio.jumpem.host/wp-content/uploads/2024/01/Ardmore-1.jpg"
+            },
+            {
+                id: 5,
+                name: "Berkeley",
+                beds: 2,
+                baths: 2,
+                price: 742,
+                sqft: 727,
+                imageUrl: "https://landmarkportfolio.jumpem.host/wp-content/uploads/2024/01/Berkeley-2.jpg"
+            },
+            {
+                id: 6,
+                name: "Bexley",
+                beds: 2,
+                baths: 2,
+                price: 1530,
+                sqft: 826,
+                imageUrl: "https://landmarkportfolio.jumpem.host/wp-content/uploads/2024/01/Bexley-2.jpg"
+            },
+            {
+                id: 7,
+                name: "Camden",
+                beds: 3,
+                baths: 3,
+                price: 1600,
+                sqft: 1119,
+                imageUrl: "https://landmarkportfolio.jumpem.host/wp-content/uploads/2024/01/Camden-1.jpg"
+            },
+            {
+                id: 8,
+                name: "Chelsea",
+                beds: 3,
+                baths: 3,
+                price: 1615,
+                sqft: 1127,
+                imageUrl: "https://landmarkportfolio.jumpem.host/wp-content/uploads/2024/01/Chelsea-2.jpg"
+            },
+            {
+                id: 9,
+                name: "Easton",
+                beds: 5,
+                baths: 5,
+                price: 1099,
+                sqft: 1665,
+                imageUrl: "https://landmarkportfolio.jumpem.host/wp-content/uploads/2024/01/Easton.jpg"
+            },
+            {
+                id: 10,
+                name: "Edgewood",
+                beds: 5,
+                baths: 5,
+                price: 1159,
+                sqft: 1691,
+                imageUrl: "https://landmarkportfolio.jumpem.host/wp-content/uploads/2024/01/Edgewood.jpg"
+            }
+        ],
+        reviews: [
+            {
+                id: 1,
+                author: "Sarah M.",
+                rating: 5,
+                date: "2024-11-15",
+                text: "Absolutely love living at The Standard! The amenities are top-notch - the gym is always clean and well-equipped, and the study lounges are perfect for group projects. Maintenance responds within 24 hours to any issues. The location is perfect for getting to campus quickly."
+            },
+            {
+                id: 2,
+                author: "Jake T.",
+                rating: 4,
+                date: "2024-10-22",
+                text: "Great place overall. The apartments are modern and spacious. My roommates and I have the 4-bedroom unit and we never feel cramped. The only downside is parking can be tough during peak hours, but that's pretty standard for student housing near campus."
+            },
+            {
+                id: 3,
+                author: "Emma L.",
+                rating: 5,
+                date: "2024-09-30",
+                text: "The Standard exceeded my expectations! The staff is incredibly friendly and helpful. I had an issue with my AC in August and they had someone fix it the same day. The pool area is amazing during the warmer months, and there are always fun resident events."
+            },
+            {
+                id: 4,
+                author: "Michael R.",
+                rating: 4,
+                date: "2024-08-18",
+                text: "Solid choice for student housing. The individual leases are clutch - no worrying about roommates bailing on rent. Internet is fast and reliable which is essential for my comp sci classes. The furniture package saved me so much hassle moving in."
+            },
+            {
+                id: 5,
+                author: "Olivia K.",
+                rating: 5,
+                date: "2024-07-05",
+                text: "Best decision I made for sophomore year! The private bathrooms in the 4-bed units are a game changer. No more sharing one bathroom with three other people. The kitchen is fully equipped and the in-unit washer/dryer is so convenient."
+            },
+            {
+                id: 6,
+                author: "David P.",
+                rating: 3,
+                date: "2024-06-12",
+                text: "It's a decent place to live. The apartment itself is nice and modern, but it can get pretty noisy on weekends. If you're a light sleeper, bring earplugs. The price is on the higher end, but you do get what you pay for in terms of amenities and location."
+            },
+            {
+                id: 7,
+                author: "Ashley W.",
+                rating: 5,
+                date: "2024-05-28",
+                text: "Couldn't be happier here! The community events are actually fun and a great way to meet people. The shuttle to campus is super reliable, and the package lockers make getting deliveries so easy. The study rooms on each floor are quiet and perfect for finals week."
+            },
+            {
+                id: 8,
+                author: "Ryan B.",
+                rating: 4,
+                date: "2024-04-14",
+                text: "Really enjoying my time here. The floor plans are well-designed with plenty of storage space. The common areas are always clean, and security makes me feel safe walking around at night. Would definitely recommend to other IU students."
+            }
+        ]
     },
     {
         id: 2,

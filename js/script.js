@@ -108,20 +108,59 @@ document.addEventListener('DOMContentLoaded', function() {
         // Handle both imageSrc and imageUrl properties
         const imageSource = apartment.imageSrc || apartment.imageUrl || 'https://via.placeholder.com/400x300?text=Apartment';
 
-        card.innerHTML = `
-            <img src="${imageSource}" alt="${apartment.name}" class="apartment-image">
-            <div class="apartment-info">
-                <h3 class="apartment-name">${apartment.name}</h3>
-                <p class="apartment-location">${apartment.location}</p>
-                <div class="apartment-details">
-                    <span class="detail-item">${apartment.beds} Bed${apartment.beds > 1 ? 's' : ''}</span>
-                    <span class="detail-separator">•</span>
-                    <span class="detail-item">${apartment.baths} Bath${apartment.baths > 1 ? 's' : ''}</span>
+        // Determine if this apartment has a detail page
+        if (apartment.hasDetailPage) {
+            // Make the card clickable and navigate to detail page
+            card.style.cursor = 'pointer';
+
+            card.innerHTML = `
+                <img src="${imageSource}" alt="${apartment.name}" class="apartment-image">
+                <div class="apartment-info">
+                    <h3 class="apartment-name">${apartment.name}</h3>
+                    <p class="apartment-location">${apartment.location}</p>
+                    <div class="apartment-details">
+                        <span class="detail-item">${apartment.beds} Bed${apartment.beds > 1 ? 's' : ''}</span>
+                        <span class="detail-separator">•</span>
+                        <span class="detail-item">${apartment.baths} Bath${apartment.baths > 1 ? 's' : ''}</span>
+                    </div>
+                    <p class="apartment-price">$${apartment.price}<span class="price-period">/month</span></p>
+                    <span class="floor-plan-link">View Details →</span>
                 </div>
-                <p class="apartment-price">$${apartment.price}<span class="price-period">/month</span></p>
-                <a href="${apartment.floorPlanUrl}" target="_blank" class="floor-plan-link">View Floor Plan →</a>
-            </div>
-        `;
+            `;
+
+            // Add click handler to navigate to detail page with current filter values
+            card.addEventListener('click', function() {
+                const bedrooms = bedroomsSelect.value;
+                const bathrooms = bathroomsSelect.value;
+
+                // Build URL with apartment ID and filter parameters
+                let url = `apartment-detail.html?id=${apartment.id}`;
+                if (bedrooms && bedrooms !== 'all') {
+                    url += `&beds=${bedrooms}`;
+                }
+                if (bathrooms && bathrooms !== 'all') {
+                    url += `&baths=${bathrooms}`;
+                }
+
+                window.location.href = url;
+            });
+        } else {
+            // Keep original behavior with external link
+            card.innerHTML = `
+                <img src="${imageSource}" alt="${apartment.name}" class="apartment-image">
+                <div class="apartment-info">
+                    <h3 class="apartment-name">${apartment.name}</h3>
+                    <p class="apartment-location">${apartment.location}</p>
+                    <div class="apartment-details">
+                        <span class="detail-item">${apartment.beds} Bed${apartment.beds > 1 ? 's' : ''}</span>
+                        <span class="detail-separator">•</span>
+                        <span class="detail-item">${apartment.baths} Bath${apartment.baths > 1 ? 's' : ''}</span>
+                    </div>
+                    <p class="apartment-price">$${apartment.price}<span class="price-period">/month</span></p>
+                    <a href="${apartment.floorPlanUrl}" target="_blank" class="floor-plan-link">View Floor Plan →</a>
+                </div>
+            `;
+        }
 
         return card;
     }
