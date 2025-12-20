@@ -304,6 +304,84 @@ footer {
     box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
 }
 
+/* Slider and range UI */
+.range-slider {
+    position: relative;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.range-slider input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    background: transparent;
+    position: relative;
+    pointer-events: auto;
+}
+
+.range-slider input[type="range"]::-webkit-slider-runnable-track {
+    height: 6px;
+    background: var(--border);
+    border-radius: 999px;
+}
+
+.range-slider input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--text);
+    border: none;
+    margin-top: -5px;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.06);
+    cursor: pointer;
+}
+
+.range-slider input[type="range"]:focus {
+    outline: none;
+}
+
+.range-values {
+    margin-top: 0.4rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.price-range {
+    position: relative;
+}
+
+.price-range input[type="range"] {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+}
+
+.price-range::after {
+    /* empty - we use dynamic inline background to draw the selected range */
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 6px;
+    background: transparent;
+    border-radius: 999px;
+    transform: translateY(-50%);
+    z-index: 0;
+}
+
+.price-range input[type="range"]::-webkit-slider-thumb {
+    z-index: 2;
+    position: relative;
+}
+
+
 .search-btn {
     background-color: var(--text);
     color: var(--bg);
