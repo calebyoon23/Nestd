@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const priceRangeSelect = document.getElementById('priceRange');
     const bedroomsSelect = document.getElementById('bedrooms');
     const bathroomsSelect = document.getElementById('bathrooms');
-    const searchBtn = document.getElementById('searchBtn');
+    const resetBtn = document.getElementById('resetBtn');
     const apartmentGrid = document.getElementById('apartmentGrid');
     const resultsCount = document.getElementById('resultsCount');
     const noResults = document.getElementById('noResults');
@@ -12,13 +12,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // Display all apartments on page load
     displayApartments(apartmentsData);
 
-    // Add event listener to search button
-    searchBtn.addEventListener('click', filterApartments);
-
-    // Also filter when any dropdown changes
+    // Filter when any dropdown changes
     priceRangeSelect.addEventListener('change', filterApartments);
     bedroomsSelect.addEventListener('change', filterApartments);
     bathroomsSelect.addEventListener('change', filterApartments);
+
+    // Reset filters when reset button is clicked
+    resetBtn.addEventListener('click', resetFilters);
+
+    function resetFilters() {
+        // Reset all dropdowns to "all"
+        priceRangeSelect.value = 'all';
+        bedroomsSelect.value = 'all';
+        bathroomsSelect.value = 'all';
+
+        // Display all apartments
+        displayApartments(apartmentsData);
+    }
 
     function filterApartments() {
         const priceRange = priceRangeSelect.value;
@@ -95,8 +105,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const card = document.createElement('div');
         card.className = 'apartment-card';
 
+        // Handle both imageSrc and imageUrl properties
+        const imageSource = apartment.imageSrc || apartment.imageUrl || 'https://via.placeholder.com/400x300?text=Apartment';
+
         card.innerHTML = `
-            <img src="${apartment.imageUrl}" alt="${apartment.name}" class="apartment-image">
+            <img src="${imageSource}" alt="${apartment.name}" class="apartment-image">
             <div class="apartment-info">
                 <h3 class="apartment-name">${apartment.name}</h3>
                 <p class="apartment-location">${apartment.location}</p>
