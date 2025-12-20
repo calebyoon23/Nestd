@@ -322,6 +322,24 @@ footer {
     transform: translateY(-1px);
 }
 
+.reset-btn {
+    background-color: var(--bg);
+    color: var(--text);
+    padding: 0.75rem 2rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 160ms ease, transform 160ms ease;
+    align-self: end;
+}
+
+.reset-btn:hover {
+    background-color: var(--surface);
+    transform: translateY(-1px);
+}
+
 /* Results Section */
 .results-section {
     margin-top: 2rem;
