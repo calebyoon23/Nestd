@@ -244,9 +244,9 @@ footer {
 /* Search Section */
 .search-section {
     background: var(--surface);
-    padding: 3rem 1rem;
-    margin-bottom: 2rem;
-    border-radius: 12px;
+    padding: 1.25rem 1rem; /* condensed */
+    margin-bottom: 1rem; /* less vertical space */
+    border-radius: 10px;
 }
 
 .search-container {
@@ -256,23 +256,34 @@ footer {
 }
 
 .search-container h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.75rem; /* smaller heading */
+    margin-bottom: 0.25rem;
     font-weight: 700;
 }
 
 .search-subtitle {
     color: var(--muted);
-    margin-bottom: 2rem;
-    font-size: 1.1rem;
+    margin-bottom: 1rem; /* reduced spacing */
+    font-size: 1rem;
 }
 
 .filters {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-top: 2rem;
+    gap: 0.5rem; /* tighter */
+    margin-top: 1rem; /* reduced */
 }
+
+/* When sliders layout is used, stack sliders and make them span the container */
+.filters.sliders {
+    grid-template-columns: 1fr;
+    gap: 0.3rem; /* tighter stacked gap */
+}
+
+.filters.sliders .filter-group {
+    width: 100%;
+    padding-bottom: 0; /* remove extra vertical padding */
+} 
 
 .filter-group {
     display: flex;
@@ -281,11 +292,11 @@ footer {
 }
 
 .filter-group label {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
     color: var(--text);
-}
+} 
 
 .filter-select {
     padding: 0.75rem;
@@ -307,10 +318,10 @@ footer {
 /* Slider and range UI */
 .range-slider {
     position: relative;
-    height: 36px;
+    height: 22px; /* more compact */
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.25rem;
 }
 
 .range-slider input[type="range"] {
@@ -323,7 +334,7 @@ footer {
 }
 
 .range-slider input[type="range"]::-webkit-slider-runnable-track {
-    height: 6px;
+    height: 5px; /* thinner track */
     background: var(--border);
     border-radius: 999px;
 }
@@ -331,12 +342,12 @@ footer {
 .range-slider input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 16px;
-    height: 16px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     background: var(--text);
     border: none;
-    margin-top: -5px;
+    margin-top: -3px;
     box-shadow: 0 0 0 2px rgba(0,0,0,0.06);
     cursor: pointer;
 }
@@ -345,16 +356,97 @@ footer {
     outline: none;
 }
 
-.range-values {
-    margin-top: 0.4rem;
-    color: var(--muted);
-    font-size: 0.95rem;
-}
+/* NOTE: visible selection indicators removed; no .range-values elements */
 
 .price-range {
     position: relative;
 }
 
+/* Ticks under sliders */
+.range-ticks {
+    position: relative;
+    margin-top: 8px; /* moved up slightly to be closer */
+    color: var(--muted);
+    font-size: 0.78rem; /* slightly smaller */
+    box-sizing: border-box;
+    height: 14px; /* reserve smaller space for tick lines */
+}
+
+.range-ticks span {
+    position: absolute;
+    top: 0;
+    left: 0; /* positioned dynamically by JS */
+    transform: translateX(-50%);
+    white-space: nowrap;
+    padding: 0 2px;
+    text-align: center;
+    cursor: default;
+}
+
+.range-ticks span::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -10px; /* align visually with track */
+    transform: translateX(-50%);
+    width: 2px;
+    height: 8px;
+    background: var(--border);
+    border-radius: 1px;
+}
+
+/* subtle hover effect: highlight tick and raise its line */
+.range-ticks span:hover {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.range-ticks span:hover::before {
+    height: 12px;
+    background: var(--text);
+}
+
+/* tooltip above tick on hover */
+.range-ticks span::after {
+    content: attr(data-label);
+    position: absolute;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    display: none;
+    background: rgba(0,0,0,0.8);
+    color: #fff;
+    padding: 4px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+.range-ticks span:hover::after {
+    display: block;
+}
+
+/* Reduce vertical spacing for stacked slider layout */
+.filters.sliders {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+}
+
+.filters.sliders .filter-group {
+    width: 100%;
+    padding-bottom: 0.25rem;
+}
+
+/* Reduce vertical spacing for stacked slider layout */
+.filters.sliders {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+}
+
+.filters.sliders .filter-group {
+    width: 100%;
+    padding-bottom: 0.25rem;
+}
 .price-range input[type="range"] {
     position: absolute;
     left: 0;
@@ -401,20 +493,23 @@ footer {
 }
 
 .reset-btn {
-    background-color: var(--bg);
+    background: transparent;
     color: var(--text);
-    padding: 0.75rem 2rem;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 1rem;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    font-size: 0.9rem; /* smaller clickable word */
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 160ms ease, transform 160ms ease;
-    align-self: end;
+    transition: color 140ms ease, transform 120ms ease;
+    align-self: start; /* keep it compact */
+    text-decoration: none;
+    line-height: 1;
 }
 
 .reset-btn:hover {
-    background-color: var(--surface);
+    color: var(--text);
+    text-decoration: underline;
     transform: translateY(-1px);
 }
 
