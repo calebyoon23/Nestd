@@ -629,6 +629,51 @@ footer {
     transform: translateY(-1px);
 }
 
+/* Amenities Filter */
+.amenities-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+}
+
+.amenity-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 180ms ease;
+    font-family: inherit;
+}
+
+.amenity-option:hover {
+    border-color: var(--text);
+    background: var(--surface);
+    transform: translateY(-1px);
+}
+
+.amenity-option.selected {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.amenity-icon {
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+.amenity-label {
+    line-height: 1;
+}
+
 /* Results Section */
 .results-section {
     margin-top: 2rem;

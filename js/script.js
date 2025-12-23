@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let bedroomsCount = 0; // 0 means "Any"
     let bathroomsCount = 0; // 0 means "Any"
 
+    // Amenities state
+    let selectedAmenities = new Set();
+
     // Get search and modal elements
     const searchInput = document.getElementById('searchInput');
     const filtersBtn = document.getElementById('filtersBtn');
@@ -58,6 +61,26 @@ document.addEventListener('DOMContentLoaded', function() {
         if (event.target === filtersModal) {
             filtersModal.style.display = 'none';
         }
+    });
+
+    // Amenities selection handlers
+    const amenityButtons = document.querySelectorAll('.amenity-option');
+    amenityButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const amenity = this.getAttribute('data-amenity');
+
+            // Toggle selected state
+            if (selectedAmenities.has(amenity)) {
+                selectedAmenities.delete(amenity);
+                this.classList.remove('selected');
+            } else {
+                selectedAmenities.add(amenity);
+                this.classList.add('selected');
+            }
+
+            // Note: No filtering yet as amenities data isn't added to apartments
+            console.log('Selected amenities:', Array.from(selectedAmenities));
+        });
     });
 
     // Calculate max price from data
@@ -187,6 +210,12 @@ document.addEventListener('DOMContentLoaded', function() {
         bathroomsCount = 0;
         updateBedroomsDisplay();
         updateBathroomsDisplay();
+
+        // Reset amenities
+        selectedAmenities.clear();
+        amenityButtons.forEach(button => {
+            button.classList.remove('selected');
+        });
 
         // Reset search
         searchInput.value = '';
