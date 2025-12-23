@@ -9,8 +9,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const resultsCount = document.getElementById('resultsCount');
     const noResults = document.getElementById('noResults');
 
-    // Display all apartments on page load
-    displayApartments(apartmentsData);
+    // Display apartments on page load; honor optional ?school= query param from home page
+    const urlParams = new URLSearchParams(window.location.search);
+    const schoolParam = urlParams.get('school');
+    if (schoolParam && schoolParam.trim().length > 0) {
+        const q = schoolParam.trim().toLowerCase();
+        const filtered = apartmentsData.filter(a => {
+            return (a.location && a.location.toLowerCase().includes(q)) ||
+                   (a.name && a.name.toLowerCase().includes(q)) ||
+                   (a.university && a.university.toLowerCase().includes(q));
+        });
+        displayApartments(filtered);
+    } else {
+        displayApartments(apartmentsData);
+    }
 
     // Derive price buckets (min / median / max) from dataset and intermediate midpoints
     // Include both apartment prices and floor plan prices

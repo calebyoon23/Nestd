@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Home — Nestd</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="home.html"><img src="images/nestd-logo.png" alt="Nestd logo"/></a>
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="index.html">Browse Apartments</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero with image and overlay text -->
+        <section class="home-hero" aria-label="Find your next nest">
+            <div class="home-hero-image" role="img" aria-hidden="true"></div>
+            <div class="home-hero-overlay">
+                <h1 class="home-hero-title">FIND YOUR NEXT NEST</h1>
+                <p class="home-hero-sub">finding an apartment has never been easier</p>
+            </div>
+
+            <!-- Scrolling pane of college logos moved into the hero so it sits flush -->
+            <div class="college-logos in-hero" aria-label="Colleges">
+                <div class="logo-scroller" aria-hidden="false">
+                    <div class="scroller-track" aria-hidden="false">
+                        <a class="scroller-item" href="index.html?school=Indiana University" aria-label="Indiana University">
+                            <img src="images/logos/iu.svg" alt="Indiana University logo">
+                            <span class="college-name visually-hidden">Indiana University</span>
+                        </a>
+                        <a class="scroller-item" href="index.html?school=Purdue" aria-label="Purdue">
+                            <img src="images/logos/purdue.png" alt="Purdue University logo">
+                            <span class="college-name visually-hidden">Purdue</span>
+                        </a>
+                        <a class="scroller-item" href="index.html?school=University of Illinois" aria-label="University of Illinois">
+                            <img src="images/logos/illinois.png" alt="University of Illinois logo">
+                            <span class="college-name visually-hidden">University of Illinois</span>
+                        </a>
+                        <a class="scroller-item" href="index.html?school=University of Wisconsin Madison" aria-label="University of Wisconsin Madison">
+                            <img src="images/logos/uwmadison.svg" alt="University of Wisconsin Madison logo">
+                            <span class="college-name visually-hidden">University of Wisconsin Madison</span>
+                        </a>
+                        <a class="scroller-item" href="index.html?school=University of Michigan" aria-label="University of Michigan">
+                            <img src="images/logos/umich.png" alt="University of Michigan logo">
+                            <span class="college-name visually-hidden">University of Michigan</span>
+                        </a>
+                        <a class="scroller-item" href="index.html?school=Ohio State University" aria-label="Ohio State University">
+                            <img src="images/logos/osu.png" alt="Ohio State University logo">
+                            <span class="college-name visually-hidden">Ohio State University</span>
+                        </a>
+                        <a class="scroller-item" href="index.html?school=Northwestern University" aria-label="Northwestern University">
+                            <img src="images/logos/northwestern.png" alt="Northwestern University logo">
+                            <span class="college-name visually-hidden">Northwestern University</span>
+                        </a>
+                        <a class="scroller-item" href="index.html?school=Michigan State University" aria-label="Michigan State University">
+                            <img src="images/logos/msu.svg" alt="Michigan State University logo">
+                            <span class="college-name visually-hidden">Michigan State University</span>
+                        </a>
+                        <a class="scroller-item" href="index.html?school=University of Notre Dame" aria-label="University of Notre Dame">
+                            <img src="images/logos/notredame.png" alt="University of Notre Dame logo">
+                            <span class="college-name visually-hidden">University of Notre Dame</span>
+                        </a>
+                        <a class="scroller-item" href="index.html?school=University of Iowa" aria-label="University of Iowa">
+                            <img src="images/logos/iowa.png" alt="University of Iowa logo">
+                            <span class="college-name visually-hidden">University of Iowa</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
+
+        <!-- University search -->
+        <section class="university-search" aria-label="Search for your university">
+            <div class="search-box">
+                <form id="uniSearchForm" action="index.html" method="get">
+                    <label for="universitySearch" class="visually-hidden">Search for university</label>
+                    <input id="universitySearch" name="school" type="search" placeholder="Search for your university (e.g. Indiana University)" aria-label="Search for your university">
+                    <button type="submit" class="search-btn">Search</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; Nestd. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Small enhancement: allow Enter to submit — form action already redirects to index with ?school=...
+        // Nothing else needed here. Links already navigate to index.html with the school parameter.
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const track = document.querySelector('.scroller-track');
+        const container = document.querySelector('.college-logos');
+        if (!track || !container) return;
+
+        // Collect only the first set of items (ignore any intentionally-hidden duplicates if present)
+        const initialItems = Array.from(track.querySelectorAll('.scroller-item')).filter(i => i.getAttribute('aria-hidden') !== 'true');
+
+        // Map to data objects (src + name)
+        const itemsData = initialItems.map(item => {
+            const img = item.querySelector('img');
+            const nameEl = item.querySelector('.college-name');
+            const name = nameEl ? nameEl.textContent.trim() : (img ? (img.getAttribute('alt') || '').replace(/ logo$/i,'') : '');
+            return { src: img ? img.getAttribute('src') : null, name };
+        }).filter(d => d.src);
+
+        // Clear current track while we load and validate images
+        track.innerHTML = '';
+
+        // Helper: create a scroller anchor element
+        function makeItem(src, name) {
+            const a = document.createElement('a');
+            a.className = 'scroller-item';
+            a.href = name ? `index.html?school=${encodeURIComponent(name)}` : 'index.html';
+            a.setAttribute('aria-label', name || '');
+
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = name ? `${name} logo` : '';
+            img.loading = 'lazy';
+            a.appendChild(img);
+
+            const span = document.createElement('span');
+            span.className = 'college-name visually-hidden';
+            span.textContent = name;
+            a.appendChild(span);
+
+            return a;
+        }
+
+        // Validate images by trying to preload them; only keep ones that succeed
+        const loadChecks = itemsData.map(d => {
+            return new Promise(resolve => {
+                const img = new Image();
+                img.src = d.src;
+                img.onload = () => resolve(d);
+                img.onerror = () => {
+                    console.warn('Logo failed to load, skipping:', d.src);
+                    resolve(null);
+                };
+            });
+        });
+
+        Promise.all(loadChecks).then(results => {
+            const valid = results.filter(Boolean);
+            if (valid.length === 0) {
+                // Nothing valid to show — hide scroller
+                container.style.display = 'none';
+                return;
+            }
+
+            // Append the validated set
+            valid.forEach(v => track.appendChild(makeItem(v.src, v.name)));
+
+            // Duplicate the same set for seamless looping
+            valid.forEach(v => {
+                const clone = makeItem(v.src, v.name);
+                clone.setAttribute('aria-hidden', 'true');
+                track.appendChild(clone);
+            });
+
+            // Start animation after layout to avoid flicker / blanks
+            requestAnimationFrame(() => {
+                // Add class that switches animation-play-state to running
+                track.classList.add('animate');
+            });
+        });
+    });
+    </script>
+</body>
+</html>
