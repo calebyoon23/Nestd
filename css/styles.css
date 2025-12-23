@@ -37,7 +37,7 @@ header {
 
     /* bar under header */
     border-bottom: 1px solid var(--border);
-}
+}  
 
 nav {
     /* full-width so logo can be truly flush left */
@@ -60,10 +60,19 @@ nav {
 .logo {
     display: flex;
     align-items: center;
+    height: 100%; /* fill header height so the anchor can fill it */
 
     /* flush left */
     margin: 0;
     padding: 0;
+}
+
+/* Make the logo anchor occupy the enlarged logo area so it's clickable at all times */
+.logo a {
+    display: inline-flex;
+    align-items: center;
+    height: 128px; /* match the enlarged image height so the whole logo is clickable */
+    padding: 0 0.5rem; /* slightly expand click area without changing layout */
 }
 
 /* If you still have text logo anywhere, keep it styled */
@@ -74,17 +83,17 @@ nav {
     margin: 0;
 }
 
-/* Logo image sizing (won't expand header height) */
+/* Logo image sizing — larger visual size while keeping header height unchanged */
 .logo img {
-    height: 210px;        /* change this to make it bigger/smaller */
-    max-height: 100%;    /* never exceed the fixed header height */
+    height: 128px;       /* increased visual size */
+    max-height: none;    /* allow larger image to overlap the header */
     width: auto;
     display: block;
 
     /* flush left edge */
     margin: 0;
     padding: 0;
-}
+} 
 
 /* Nav links: far right, horizontal */
 .nav-links {
