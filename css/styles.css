@@ -267,6 +267,135 @@ footer {
     font-size: 1rem;
 }
 
+/* Search Bar and Filters Button */
+.search-bar-container {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    align-items: center;
+}
+
+.search-input {
+    flex: 1;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+    background: var(--bg);
+    transition: border-color 160ms ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--text);
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+}
+
+.filters-btn {
+    background-color: var(--text);
+    color: var(--bg);
+    padding: 0.85rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 160ms ease, transform 160ms ease;
+    white-space: nowrap;
+}
+
+.filters-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: var(--bg);
+    border-radius: 12px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--muted);
+    transition: color 160ms ease;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.close-modal:hover {
+    color: var(--text);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.apply-filters-btn {
+    background-color: var(--text);
+    color: var(--bg);
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.apply-filters-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
 .filters {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -296,7 +425,53 @@ footer {
     font-weight: 600;
     margin-bottom: 0.3rem;
     color: var(--text);
-} 
+}
+
+/* Counter Controls */
+.counter-control {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+}
+
+.counter-btn {
+    background: var(--text);
+    color: var(--bg);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 1.25rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 160ms ease, transform 160ms ease;
+    line-height: 1;
+}
+
+.counter-btn:hover {
+    opacity: 0.9;
+    transform: scale(1.05);
+}
+
+.counter-btn:active {
+    transform: scale(0.95);
+}
+
+.counter-value {
+    flex: 1;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    min-width: 60px;
+}
 
 .filter-select {
     padding: 0.75rem;
@@ -315,162 +490,103 @@ footer {
     box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
 }
 
-/* Slider and range UI */
-.range-slider {
+/* Dual-Range Slider */
+.dual-range-slider {
     position: relative;
-    height: 22px; /* more compact */
+    height: 40px;
     display: flex;
     align-items: center;
-    gap: 0.25rem;
 }
 
-.range-slider input[type="range"] {
+.slider-track {
+    position: absolute;
+    width: 100%;
+    height: 6px;
+    background: var(--border);
+    border-radius: 999px;
+    z-index: 1;
+}
+
+.slider-range {
+    position: absolute;
+    height: 6px;
+    background: var(--text);
+    border-radius: 999px;
+    z-index: 2;
+}
+
+.range-input {
+    position: absolute;
+    width: 100%;
+    height: 6px;
     -webkit-appearance: none;
     appearance: none;
-    width: 100%;
     background: transparent;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.range-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--text);
+    border: 3px solid var(--bg);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    cursor: pointer;
+    pointer-events: auto;
     position: relative;
+    z-index: 4;
+}
+
+.range-input::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--text);
+    border: 3px solid var(--bg);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    cursor: pointer;
     pointer-events: auto;
 }
 
-.range-slider input[type="range"]::-webkit-slider-runnable-track {
-    height: 5px; /* thinner track */
-    background: var(--border);
-    border-radius: 999px;
+.range-input::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
 }
 
-.range-slider input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--text);
-    border: none;
-    margin-top: -3px;
-    box-shadow: 0 0 0 2px rgba(0,0,0,0.06);
-    cursor: pointer;
+.range-input::-moz-range-thumb:hover {
+    transform: scale(1.1);
 }
 
-.range-slider input[type="range"]:focus {
+.range-input:focus {
     outline: none;
 }
 
-/* NOTE: visible selection indicators removed; no .range-values elements */
-
-.price-range {
-    position: relative;
+/* Price Bubbles */
+.price-bubbles {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.75rem;
 }
 
-/* Ticks under sliders */
-.range-ticks {
-    position: relative;
-    margin-top: 8px; /* moved up slightly to be closer */
-    color: var(--muted);
-    font-size: 0.78rem; /* slightly smaller */
-    box-sizing: border-box;
-    height: 14px; /* reserve smaller space for tick lines */
-}
-
-.range-ticks span {
-    position: absolute;
-    top: 0;
-    left: 0; /* positioned dynamically by JS */
-    transform: translateX(-50%);
-    white-space: nowrap;
-    padding: 0 2px;
-    text-align: center;
-    cursor: default;
-}
-
-.range-ticks span::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: -10px; /* align visually with track */
-    transform: translateX(-50%);
-    width: 2px;
-    height: 8px;
-    background: var(--border);
-    border-radius: 1px;
-}
-
-/* subtle hover effect: highlight tick and raise its line */
-.range-ticks span:hover {
-    color: var(--text);
+.price-bubble {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
     font-weight: 600;
+    color: var(--text);
 }
 
-.range-ticks span:hover::before {
-    height: 12px;
-    background: var(--text);
+.price-bubble-min {
+    text-align: left;
 }
 
-/* tooltip above tick on hover */
-.range-ticks span::after {
-    content: attr(data-label);
-    position: absolute;
-    left: 50%;
-    bottom: 22px;
-    transform: translateX(-50%);
-    display: none;
-    background: rgba(0,0,0,0.8);
-    color: #fff;
-    padding: 4px 6px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    white-space: nowrap;
-}
-
-.range-ticks span:hover::after {
-    display: block;
-}
-
-/* Reduce vertical spacing for stacked slider layout */
-.filters.sliders {
-    grid-template-columns: 1fr;
-    gap: 0.6rem;
-}
-
-.filters.sliders .filter-group {
-    width: 100%;
-    padding-bottom: 0.25rem;
-}
-
-/* Reduce vertical spacing for stacked slider layout */
-.filters.sliders {
-    grid-template-columns: 1fr;
-    gap: 0.6rem;
-}
-
-.filters.sliders .filter-group {
-    width: 100%;
-    padding-bottom: 0.25rem;
-}
-.price-range input[type="range"] {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-}
-
-.price-range::after {
-    /* empty - we use dynamic inline background to draw the selected range */
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
-    height: 6px;
-    background: transparent;
-    border-radius: 999px;
-    transform: translateY(-50%);
-    z-index: 0;
-}
-
-.price-range input[type="range"]::-webkit-slider-thumb {
-    z-index: 2;
-    position: relative;
+.price-bubble-max {
+    text-align: right;
 }
 
 
@@ -648,6 +764,26 @@ footer {
 
     .search-container h1 {
         font-size: 1.75rem;
+    }
+
+    .search-bar-container {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .filters-btn {
+        width: 100%;
+    }
+
+    .modal-content {
+        width: 95%;
+        max-height: 90vh;
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding: 1rem;
     }
 
     .filters {

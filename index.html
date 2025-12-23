@@ -30,64 +30,79 @@
                 <h1>Find Your Perfect IU Apartment</h1>
                 <p class="search-subtitle">Search through available apartments near Indiana University</p>
 
-                <div class="filters sliders">
-                    <!-- Price Range Slider -->
-                    <div class="filter-group">
-                        <label for="priceRange">Price Range</label>
-                        <div class="range-slider price-range">
-                            <input type="range" id="priceRange" min="0" max="6" step="1" value="0" />
-                        </div>
-                        <div class="range-ticks" id="priceRangeTicks" aria-hidden="true">
-                            <span data-index="0" data-label="All Prices">All</span>
-                            <span data-index="1" data-label="Mid 1">—</span>
-                            <span data-index="2" data-label="Median">—</span>
-                            <span data-index="3" data-label="Between Median & Mid">—</span>
-                            <span data-index="4" data-label="Mid 2">—</span>
-                            <span data-index="5" data-label="Near Max">—</span>
-                            <span data-index="6" data-label="Max">—</span>
-                        </div>
-                    </div>
-
-                    <!-- Bedrooms Slider -->
-                    <div class="filter-group">
-                        <label for="bedrooms">Bedrooms</label>
-                        <div class="range-slider">
-                            <input type="range" id="bedrooms" min="0" max="5" step="1" value="0" />
-                        </div>
-                        <div class="range-ticks" id="bedroomsTicks" aria-hidden="true">
-                            <span data-index="0" data-label="Any">Any</span>
-                            <span data-index="1" data-label="1 Bed">1</span>
-                            <span data-index="2" data-label="2 Beds">2</span>
-                            <span data-index="3" data-label="3 Beds">3</span>
-                            <span data-index="4" data-label="4 Beds">4</span>
-                            <span data-index="5" data-label="5+ Beds">5+</span>
-                        </div>
-                    </div>
-
-                    <!-- Bathrooms Slider -->
-                    <div class="filter-group">
-                        <label for="bathrooms">Bathrooms</label>
-                        <div class="range-slider">
-                            <input type="range" id="bathrooms" min="0" max="5" step="1" value="0" />
-                        </div>
-                        <div class="range-ticks" id="bathroomsTicks" aria-hidden="true">
-                            <span data-index="0" data-label="Any">Any</span>
-                            <span data-index="1" data-label="1 Bath">1</span>
-                            <span data-index="2" data-label="2 Baths">2</span>
-                            <span data-index="3" data-label="3 Baths">3</span>
-                            <span data-index="4" data-label="4 Baths">4</span>
-                            <span data-index="5" data-label="5+ Baths">5+</span>
-                        </div>
-                    </div>
-
-                    <!-- Reset Button -->
-                    <div class="filter-group">
-                        <label>&nbsp;</label>
-                        <button id="resetBtn" class="reset-btn">Reset Filters</button>
-                    </div>
+                <!-- Search Bar and Filters Button -->
+                <div class="search-bar-container">
+                    <input
+                        type="text"
+                        id="searchInput"
+                        class="search-input"
+                        placeholder="Search apartments by name or location..."
+                    />
+                    <button id="filtersBtn" class="filters-btn">Filters</button>
                 </div>
             </div>
         </section>
+
+        <!-- Filters Modal -->
+        <div id="filtersModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Filters</h2>
+                    <button id="closeModal" class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="filters sliders">
+                        <!-- Price Range Slider -->
+                        <div class="filter-group">
+                            <label for="priceRange">Price Range</label>
+                            <div class="dual-range-slider">
+                                <div class="slider-track"></div>
+                                <div class="slider-range" id="sliderRange"></div>
+                                <input type="range" id="priceMin" class="range-input range-min" min="0" max="3000" step="50" value="0" />
+                                <input type="range" id="priceMax" class="range-input range-max" min="0" max="3000" step="50" value="3000" />
+                            </div>
+                            <div class="price-bubbles">
+                                <div class="price-bubble price-bubble-min">
+                                    <span id="minPriceDisplay">$0</span>
+                                </div>
+                                <div class="price-bubble price-bubble-max">
+                                    <span id="maxPriceDisplay">$3,000</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bedrooms Counter -->
+                        <div class="filter-group">
+                            <label for="bedrooms">Bedrooms</label>
+                            <div class="counter-control">
+                                <button type="button" class="counter-btn" id="bedroomsDecrement">−</button>
+                                <span class="counter-value" id="bedroomsValue">Any</span>
+                                <button type="button" class="counter-btn" id="bedroomsIncrement">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Bathrooms Counter -->
+                        <div class="filter-group">
+                            <label for="bathrooms">Bathrooms</label>
+                            <div class="counter-control">
+                                <button type="button" class="counter-btn" id="bathroomsDecrement">−</button>
+                                <span class="counter-value" id="bathroomsValue">Any</span>
+                                <button type="button" class="counter-btn" id="bathroomsIncrement">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Reset Button -->
+                        <div class="filter-group">
+                            <label>&nbsp;</label>
+                            <button id="resetBtn" class="reset-btn">Reset Filters</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="applyFiltersBtn" class="apply-filters-btn">Apply Filters</button>
+                </div>
+            </div>
+        </div>
 
         <!-- Results Section -->
         <section id="results" class="results-section">
