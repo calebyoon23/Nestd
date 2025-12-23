@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const apartmentId = parseInt(urlParams.get('id'));
     const filterBeds = urlParams.get('beds'); // User's original filter
     const filterBaths = urlParams.get('baths'); // User's original filter
+    const filterPrice = urlParams.get('price'); // User's original price filter
 
     // Find the apartment data
     const apartment = apartmentsData.find(apt => apt.id === apartmentId);
@@ -18,8 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize the page
     displayHeroSection(apartment);
     displayReviews(apartment);
-    displayFloorPlans(apartment, filterBeds, filterBaths);
-    setupFloorPlanFilters(apartment);
+    displayFloorPlans(apartment, filterBeds, filterBaths, filterPrice);
+    setupFloorPlanFilters();
 });
 
 function displayHeroSection(apartment) {
@@ -112,7 +113,7 @@ function createReviewCard(review) {
     return card;
 }
 
-function displayFloorPlans(apartment, filterBeds, filterBaths) {
+function displayFloorPlans(apartment, filterBeds, filterBaths, filterPrice) {
     if (!apartment.floorPlans || apartment.floorPlans.length === 0) {
         document.querySelector('.floor-plans-section').innerHTML = '<p>No floor plans available.</p>';
         return;
@@ -121,36 +122,69 @@ function displayFloorPlans(apartment, filterBeds, filterBaths) {
     const floorPlansList = document.getElementById('floorPlansList');
     floorPlansList.innerHTML = '';
 
+    let firstHighlightedCard = null;
+
     apartment.floorPlans.forEach(floorPlan => {
-        const isHighlighted = shouldHighlightFloorPlan(floorPlan, filterBeds, filterBaths);
+        const isHighlighted = shouldHighlightFloorPlan(floorPlan, filterBeds, filterBaths, filterPrice);
         const card = createFloorPlanCard(floorPlan, isHighlighted);
         floorPlansList.appendChild(card);
+
+        // Track the first highlighted card for scrolling
+        if (isHighlighted && !firstHighlightedCard) {
+            firstHighlightedCard = card;
+        }
     });
+
+    // Auto-scroll to the first highlighted floor plan after a short delay
+    if (firstHighlightedCard) {
+        setTimeout(() => {
+            firstHighlightedCard.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }, 300);
+    }
 }
 
-function shouldHighlightFloorPlan(floorPlan, filterBeds, filterBaths) {
-    if (!filterBeds && !filterBaths) return false;
+function shouldHighlightFloorPlan(floorPlan, filterBeds, filterBaths, filterPrice) {
+    // Only highlight if there are filters applied
+    if (!filterBeds && !filterBaths && !filterPrice) return false;
 
     let bedsMatch = true;
     let bathsMatch = true;
+    let priceMatch = true;
 
+    // Check bedrooms filter
     if (filterBeds && filterBeds !== 'all') {
-        if (filterBeds === '4') {
-            bedsMatch = floorPlan.beds >= 4 || floorPlan.beds === '4+';
+        const beds = floorPlan.beds === 'Studio' ? 0 : floorPlan.beds;
+        if (filterBeds === '5+') {
+            bedsMatch = beds >= 5;
         } else {
-            bedsMatch = floorPlan.beds == filterBeds;
+            bedsMatch = beds == parseInt(filterBeds);
         }
     }
 
+    // Check bathrooms filter
     if (filterBaths && filterBaths !== 'all') {
-        if (filterBaths === '2+') {
-            bathsMatch = floorPlan.baths >= 2;
+        if (filterBaths === '5+') {
+            bathsMatch = floorPlan.baths >= 5;
         } else {
             bathsMatch = floorPlan.baths >= parseFloat(filterBaths);
         }
     }
 
-    return bedsMatch && bathsMatch;
+    // Check price filter
+    if (filterPrice) {
+        const [minPrice, maxPrice] = filterPrice.split('-').map(p => parseInt(p));
+        if (maxPrice) {
+            priceMatch = floorPlan.price >= minPrice && floorPlan.price <= maxPrice;
+        } else {
+            // If no max, it's a "min+" filter
+            priceMatch = floorPlan.price >= minPrice;
+        }
+    }
+
+    return bedsMatch && bathsMatch && priceMatch;
 }
 
 function createFloorPlanCard(floorPlan, isHighlighted) {
@@ -177,7 +211,7 @@ function createFloorPlanCard(floorPlan, isHighlighted) {
     return card;
 }
 
-function setupFloorPlanFilters(apartment) {
+function setupFloorPlanFilters() {
     const filterButtons = document.querySelectorAll('.filter-btn');
 
     filterButtons.forEach(button => {

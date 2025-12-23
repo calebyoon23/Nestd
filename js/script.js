@@ -13,7 +13,20 @@ document.addEventListener('DOMContentLoaded', function() {
     displayApartments(apartmentsData);
 
     // Derive price buckets (min / median / max) from dataset and intermediate midpoints
-    const prices = apartmentsData.map(a => Number(a.price)).filter(n => !isNaN(n)).sort((a,b) => a - b);
+    // Include both apartment prices and floor plan prices
+    let allPrices = [];
+    apartmentsData.forEach(apartment => {
+        if (apartment.floorPlans && apartment.floorPlans.length > 0) {
+            apartment.floorPlans.forEach(fp => {
+                const price = Number(fp.price);
+                if (!isNaN(price)) allPrices.push(price);
+            });
+        } else {
+            const price = Number(apartment.price);
+            if (!isNaN(price)) allPrices.push(price);
+        }
+    });
+    const prices = allPrices.sort((a,b) => a - b);
     const priceMin = prices.length ? prices[0] : 0;
     const priceMax = prices.length ? prices[prices.length - 1] : 0;
     let priceMedian = 0;
@@ -70,9 +83,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-
-    const bathroomsLabels = ['Any', '1 Bath', '2 Baths', '3 Baths', '4 Baths', '5+ Baths'];
-
 
     // Draw filled track for ranges
     function setRangeBackground(input) {
@@ -153,29 +163,31 @@ document.addEventListener('DOMContentLoaded', function() {
         const bedroomsVal = parseInt(bedroomsInput.value);
         const bathroomsIndex = parseInt(bathroomsInput.value);
 
-        let filtered = apartmentsData.filter(apartment => {
-                    // Filter by price using the expanded buckets (indices 1..6 correspond to progressively higher numeric cutoffs)
+        // Helper function to check if a listing matches filters
+        function matchesFilters(listing) {
+            // Filter by price
             let priceMatch = true;
             if (priceIndex !== 0) {
-                // use the precomputed rounded bounds array
                 if (priceIndex === 1) {
-                    priceMatch = apartment.price <= bounds[0];
+                    priceMatch = listing.price <= bounds[0];
                 } else if (priceIndex > 1 && priceIndex < 6) {
                     const lower = bounds[priceIndex - 2];
                     const upper = bounds[priceIndex - 1];
-                    priceMatch = apartment.price > lower && apartment.price <= upper;
+                    priceMatch = listing.price > lower && listing.price <= upper;
                 } else if (priceIndex === 6) {
-                    priceMatch = apartment.price >= bounds[5];
+                    priceMatch = listing.price >= bounds[5];
                 }
             }
 
             // Filter by bedrooms
             let bedroomMatch = true;
             if (bedroomsVal !== 0) {
+                // Handle Studio listings
+                const beds = listing.beds === 'Studio' ? 0 : listing.beds;
                 if (bedroomsVal === 5) {
-                    bedroomMatch = apartment.beds >= 5;
+                    bedroomMatch = beds >= 5;
                 } else {
-                    bedroomMatch = apartment.beds === bedroomsVal;
+                    bedroomMatch = beds === bedroomsVal;
                 }
             }
 
@@ -183,16 +195,41 @@ document.addEventListener('DOMContentLoaded', function() {
             let bathroomMatch = true;
             if (bathroomsIndex !== 0) {
                 if (bathroomsIndex === 5) {
-                    bathroomMatch = apartment.baths >= 5;
+                    bathroomMatch = listing.baths >= 5;
                 } else {
-                    bathroomMatch = apartment.baths >= bathroomsIndex;
+                    bathroomMatch = listing.baths >= bathroomsIndex;
                 }
             }
 
             return priceMatch && bedroomMatch && bathroomMatch;
+        }
+
+        // Build filtered apartments array with matching floor plan counts
+        let filteredApartments = [];
+
+        apartmentsData.forEach(apartment => {
+            if (apartment.floorPlans && apartment.floorPlans.length > 0) {
+                // For apartments with detailed floor plans, count how many match
+                const matchingFloorPlans = apartment.floorPlans.filter(floorPlan => {
+                    return matchesFilters(floorPlan);
+                });
+
+                // Only include apartment if it has matching floor plans
+                if (matchingFloorPlans.length > 0) {
+                    filteredApartments.push({
+                        ...apartment,
+                        availableFloorPlans: matchingFloorPlans.length
+                    });
+                }
+            } else {
+                // For apartments without floor plans, show them if they match
+                if (matchesFilters(apartment)) {
+                    filteredApartments.push(apartment);
+                }
+            }
         });
 
-        displayApartments(filtered);
+        displayApartments(filteredApartments);
     }
 
     function displayApartments(apartments) {
@@ -225,22 +262,25 @@ document.addEventListener('DOMContentLoaded', function() {
         // Handle both imageSrc and imageUrl properties
         const imageSource = apartment.imageSrc || apartment.imageUrl || 'https://via.placeholder.com/400x300?text=Apartment';
 
+        // Determine if we should show available floor plans count
+        const showFloorPlansCount = apartment.availableFloorPlans && apartment.availableFloorPlans > 0;
+
         // Determine if this apartment has a detail page
         if (apartment.hasDetailPage) {
             // Make the card clickable and navigate to detail page
             card.style.cursor = 'pointer';
+
+            // Build the floor plans info if available
+            const floorPlansInfo = showFloorPlansCount
+                ? `<p class="available-plans">${apartment.availableFloorPlans} available floor plan${apartment.availableFloorPlans > 1 ? 's' : ''}</p>`
+                : '';
 
             card.innerHTML = `
                 <img src="${imageSource}" alt="${apartment.name}" class="apartment-image">
                 <div class="apartment-info">
                     <h3 class="apartment-name">${apartment.name}</h3>
                     <p class="apartment-location">${apartment.location}</p>
-                    <div class="apartment-details">
-                        <span class="detail-item">${apartment.beds} Bed${apartment.beds > 1 ? 's' : ''}</span>
-                        <span class="detail-separator">•</span>
-                        <span class="detail-item">${apartment.baths} Bath${apartment.baths > 1 ? 's' : ''}</span>
-                    </div>
-                    <p class="apartment-price">$${apartment.price}<span class="price-period">/month</span></p>
+                    ${floorPlansInfo}
                     <span class="floor-plan-link">View Details →</span>
                 </div>
             `;
@@ -249,6 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
             card.addEventListener('click', function() {
                 const bedVal = parseInt(bedroomsInput.value);
                 const bathIndex = parseInt(bathroomsInput.value);
+                const priceIndex = parseInt(priceRangeInput.value);
 
                 // Build URL with apartment ID and filter parameters
                 let url = `apartment-detail.html?id=${apartment.id}`;
@@ -262,6 +303,23 @@ document.addEventListener('DOMContentLoaded', function() {
                     url += `&baths=${bathMap[bathIndex]}`;
                 }
 
+                // Add price range if a price filter is selected
+                if (priceIndex && priceIndex !== 0) {
+                    let priceParam = '';
+                    if (priceIndex === 1) {
+                        priceParam = `0-${bounds[0]}`;
+                    } else if (priceIndex > 1 && priceIndex < 6) {
+                        const lower = bounds[priceIndex - 2];
+                        const upper = bounds[priceIndex - 1];
+                        priceParam = `${lower}-${upper}`;
+                    } else if (priceIndex === 6) {
+                        priceParam = `${bounds[5]}-999999`;
+                    }
+                    if (priceParam) {
+                        url += `&price=${priceParam}`;
+                    }
+                }
+
                 window.location.href = url;
             });
         } else {
@@ -271,12 +329,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="apartment-info">
                     <h3 class="apartment-name">${apartment.name}</h3>
                     <p class="apartment-location">${apartment.location}</p>
-                    <div class="apartment-details">
-                        <span class="detail-item">${apartment.beds} Bed${apartment.beds > 1 ? 's' : ''}</span>
-                        <span class="detail-separator">•</span>
-                        <span class="detail-item">${apartment.baths} Bath${apartment.baths > 1 ? 's' : ''}</span>
-                    </div>
-                    <p class="apartment-price">$${apartment.price}<span class="price-period">/month</span></p>
                     <a href="${apartment.floorPlanUrl}" target="_blank" class="floor-plan-link">View Floor Plan →</a>
                 </div>
             `;
