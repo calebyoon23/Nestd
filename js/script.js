@@ -1,9 +1,6 @@
 // Wait for DOM to load
 document.addEventListener('DOMContentLoaded', function() {
-    // Get filter elements (now range sliders)
-    const priceRangeInput = document.getElementById('priceRange');
-    const bedroomsInput = document.getElementById('bedrooms');
-    const bathroomsInput = document.getElementById('bathrooms');
+    // Get filter elements
     const resetBtn = document.getElementById('resetBtn');
     const apartmentGrid = document.getElementById('apartmentGrid');
     const resultsCount = document.getElementById('resultsCount');
@@ -23,9 +20,84 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         displayApartments(apartmentsData);
     }
+    // Get dual-range slider elements
+    const priceMinInput = document.getElementById('priceMin');
+    const priceMaxInput = document.getElementById('priceMax');
+    const minPriceDisplay = document.getElementById('minPriceDisplay');
+    const maxPriceDisplay = document.getElementById('maxPriceDisplay');
+    const sliderRange = document.getElementById('sliderRange');
 
-    // Derive price buckets (min / median / max) from dataset and intermediate midpoints
-    // Include both apartment prices and floor plan prices
+    // Get counter elements
+    const bedroomsValue = document.getElementById('bedroomsValue');
+    const bedroomsDecrement = document.getElementById('bedroomsDecrement');
+    const bedroomsIncrement = document.getElementById('bedroomsIncrement');
+    const bathroomsValue = document.getElementById('bathroomsValue');
+    const bathroomsDecrement = document.getElementById('bathroomsDecrement');
+    const bathroomsIncrement = document.getElementById('bathroomsIncrement');
+
+    // Counter state
+    let bedroomsCount = 0; // 0 means "Any"
+    let bathroomsCount = 0; // 0 means "Any"
+
+    // Amenities state
+    let selectedAmenities = new Set();
+
+    // Get search and modal elements
+    const searchInput = document.getElementById('searchInput');
+    const filtersBtn = document.getElementById('filtersBtn');
+    const filtersModal = document.getElementById('filtersModal');
+    const closeModal = document.getElementById('closeModal');
+    const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+
+    // Display all apartments on page load
+    displayApartments(apartmentsData);
+
+    // Search input handler
+    searchInput.addEventListener('input', function() {
+        filterApartments();
+    });
+
+    // Modal open/close handlers
+    filtersBtn.addEventListener('click', function() {
+        filtersModal.style.display = 'flex';
+    });
+
+    closeModal.addEventListener('click', function() {
+        filtersModal.style.display = 'none';
+    });
+
+    applyFiltersBtn.addEventListener('click', function() {
+        filtersModal.style.display = 'none';
+    });
+
+    // Close modal when clicking outside of it
+    window.addEventListener('click', function(event) {
+        if (event.target === filtersModal) {
+            filtersModal.style.display = 'none';
+        }
+    });
+
+    // Amenities selection handlers
+    const amenityButtons = document.querySelectorAll('.amenity-option');
+    amenityButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const amenity = this.getAttribute('data-amenity');
+
+            // Toggle selected state
+            if (selectedAmenities.has(amenity)) {
+                selectedAmenities.delete(amenity);
+                this.classList.remove('selected');
+            } else {
+                selectedAmenities.add(amenity);
+                this.classList.add('selected');
+            }
+
+            // Note: No filtering yet as amenities data isn't added to apartments
+            console.log('Selected amenities:', Array.from(selectedAmenities));
+        });
+    });
+
+    // Calculate max price from data
     let allPrices = [];
     apartmentsData.forEach(apartment => {
         if (apartment.floorPlans && apartment.floorPlans.length > 0) {
@@ -39,177 +111,162 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     const prices = allPrices.sort((a,b) => a - b);
-    const priceMin = prices.length ? prices[0] : 0;
-    const priceMax = prices.length ? prices[prices.length - 1] : 0;
-    let priceMedian = 0;
-    if (prices.length) {
-        const mid = Math.floor(prices.length / 2);
-        priceMedian = prices.length % 2 === 1 ? prices[mid] : Math.round((prices[mid - 1] + prices[mid]) / 2);
-    }
+    const maxPriceFromData = prices.length ? prices[prices.length - 1] : 3000;
+    const roundedMaxPrice = Math.ceil(maxPriceFromData / 100) * 100; // Round up to nearest 100
 
-    // compute midpoints between min/median/max for extra ticks
-    const raw_mid1 = Math.round((priceMin + priceMedian) / 2);
-    const raw_mid2 = Math.round((priceMedian + priceMax) / 2);
-    const raw_midBetweenMedianAndMid2 = Math.round((priceMedian + raw_mid2) / 2);
-    const raw_midBetweenMid2AndMax = Math.round((raw_mid2 + priceMax) / 2);
+    // Set the max value for both sliders
+    priceMinInput.max = roundedMaxPrice;
+    priceMaxInput.max = roundedMaxPrice;
+    priceMaxInput.value = roundedMaxPrice;
 
-    // Rounding helpers per your rules
-    function roundNearestHundred(n) { return Math.round(n / 100) * 100; }
-    function floorHundred(n) { return Math.floor(n / 100) * 100; }
-    function ceilHundred(n) { return Math.ceil(n / 100) * 100; }
-
-    // Apply rounding rules:
-    // - lowest numeric tick (mid1) => round DOWN to nearest 100
-    // - highest tick (priceMax) => round UP to nearest 100
-    // - others => round to nearest 100
-    const mid1 = floorHundred(raw_mid1);
-    const medianRounded = roundNearestHundred(priceMedian);
-    const midBetweenMedianAndMid2 = roundNearestHundred(raw_midBetweenMedianAndMid2);
-    const mid2 = roundNearestHundred(raw_mid2);
-    const midBetweenMid2AndMax = roundNearestHundred(raw_midBetweenMid2AndMax);
-    const priceMaxRounded = ceilHundred(priceMax);
-
-    // Ensure strictly increasing bounds (avoid duplicates after rounding)
-    let bounds = [mid1, medianRounded, midBetweenMedianAndMid2, mid2, midBetweenMid2AndMax, priceMaxRounded];
-    for (let i = 1; i < bounds.length; i++) {
-        if (bounds[i] <= bounds[i - 1]) bounds[i] = bounds[i - 1] + 100;
-    }
-
-    // Update visible tick labels for price to show rounded values
+    // Format money helper
     function formatMoney(n) {
         return `$${n.toLocaleString()}`;
     }
 
-    const priceTicksContainer = document.getElementById('priceRangeTicks');
-    if (priceTicksContainer) {
-        const spans = priceTicksContainer.querySelectorAll('span');
-        spans.forEach(s => {
-            const idx = parseInt(s.dataset.index);
-            if (idx === 0) {
-                s.textContent = 'All';
-                s.dataset.label = 'All Prices';
-            } else {
-                const v = bounds[idx - 1];
-                s.textContent = formatMoney(v);
-                s.dataset.label = `${formatMoney(v)}`;
-            }
-        });
+    // Update display and range highlight
+    function updatePriceRange() {
+        let minVal = parseInt(priceMinInput.value);
+        let maxVal = parseInt(priceMaxInput.value);
+
+        // Ensure min doesn't exceed max
+        if (minVal > maxVal - 50) {
+            minVal = maxVal - 50;
+            priceMinInput.value = minVal;
+        }
+
+        // Update displays
+        minPriceDisplay.textContent = formatMoney(minVal);
+        maxPriceDisplay.textContent = formatMoney(maxVal);
+
+        // Update the highlighted range between handles
+        const percentMin = (minVal / roundedMaxPrice) * 100;
+        const percentMax = (maxVal / roundedMaxPrice) * 100;
+        sliderRange.style.left = percentMin + '%';
+        sliderRange.style.width = (percentMax - percentMin) + '%';
+
+        // Filter apartments
+        filterApartments();
     }
 
-    // Draw filled track for ranges
-    function setRangeBackground(input) {
-        const min = parseFloat(input.min);
-        const max = parseFloat(input.max);
-        const val = parseFloat(input.value);
-        const percent = ((val - min) / (max - min)) * 100;
-        input.style.background = `linear-gradient(90deg, var(--text) ${percent}%, var(--border) ${percent}%)`;
+    // Initialize display
+    maxPriceDisplay.textContent = formatMoney(roundedMaxPrice);
+    updatePriceRange();
+
+    // Dual-range slider event handlers
+    priceMinInput.addEventListener('input', updatePriceRange);
+    priceMaxInput.addEventListener('input', updatePriceRange);
+
+    // Counter button handlers
+    function updateBedroomsDisplay() {
+        if (bedroomsCount === 0) {
+            bedroomsValue.textContent = 'Any';
+        } else if (bedroomsCount >= 5) {
+            bedroomsValue.textContent = '5+';
+        } else {
+            bedroomsValue.textContent = bedroomsCount;
+        }
     }
 
-    setRangeBackground(priceRangeInput);
-    setRangeBackground(bedroomsInput);
-    setRangeBackground(bathroomsInput);
-
-    // Position ticks so first and last are flush to edges and evenly spaced
-    function positionTicks(ticksId, maxIndex) {
-        const container = document.getElementById(ticksId);
-        if (!container) return;
-        const spans = container.querySelectorAll('span');
-        spans.forEach(s => {
-            const idx = parseInt(s.dataset.index);
-            const left = (idx / maxIndex) * 100;
-            s.style.left = left + '%';
-        });
+    function updateBathroomsDisplay() {
+        if (bathroomsCount === 0) {
+            bathroomsValue.textContent = 'Any';
+        } else if (bathroomsCount >= 5) {
+            bathroomsValue.textContent = '5+';
+        } else {
+            bathroomsValue.textContent = bathroomsCount;
+        }
     }
 
-    // Initialize tick positions (price now has 7 ticks: 0..6)
-    positionTicks('priceRangeTicks', 6);
-    positionTicks('bedroomsTicks', 5);
-    positionTicks('bathroomsTicks', 5);
-
-    // Reposition ticks on resize to remain aligned
-    window.addEventListener('resize', function() {
-        positionTicks('priceRangeTicks', 6);
-        positionTicks('bedroomsTicks', 5);
-        positionTicks('bathroomsTicks', 5);
+    bedroomsIncrement.addEventListener('click', function() {
+        if (bedroomsCount < 5) {
+            bedroomsCount++;
+            updateBedroomsDisplay();
+            filterApartments();
+        }
     });
 
-    // Filter while user drags
-    priceRangeInput.addEventListener('input', function() {
-        setRangeBackground(this);
-        filterApartments();
+    bedroomsDecrement.addEventListener('click', function() {
+        if (bedroomsCount > 0) {
+            bedroomsCount--;
+            updateBedroomsDisplay();
+            filterApartments();
+        }
     });
 
-    bedroomsInput.addEventListener('input', function() {
-        setRangeBackground(this);
-        filterApartments();
+    bathroomsIncrement.addEventListener('click', function() {
+        if (bathroomsCount < 5) {
+            bathroomsCount++;
+            updateBathroomsDisplay();
+            filterApartments();
+        }
     });
 
-    bathroomsInput.addEventListener('input', function() {
-        setRangeBackground(this);
-        filterApartments();
+    bathroomsDecrement.addEventListener('click', function() {
+        if (bathroomsCount > 0) {
+            bathroomsCount--;
+            updateBathroomsDisplay();
+            filterApartments();
+        }
     });
 
     // Reset filters when reset button is clicked
     resetBtn.addEventListener('click', resetFilters);
 
     function resetFilters() {
-        // Reset sliders to 'Any' position
-        priceRangeInput.value = 0;
-        bedroomsInput.value = 0;
-        bathroomsInput.value = 0;
+        // Reset price sliders
+        priceMinInput.value = 0;
+        priceMaxInput.value = roundedMaxPrice;
+        updatePriceRange();
 
-        setRangeBackground(priceRangeInput);
-        setRangeBackground(bedroomsInput);
-        setRangeBackground(bathroomsInput);
+        // Reset counters to 'Any'
+        bedroomsCount = 0;
+        bathroomsCount = 0;
+        updateBedroomsDisplay();
+        updateBathroomsDisplay();
 
-        positionTicks('priceRangeTicks', 6);
-        positionTicks('bedroomsTicks', 5);
-        positionTicks('bathroomsTicks', 5);
+        // Reset amenities
+        selectedAmenities.clear();
+        amenityButtons.forEach(button => {
+            button.classList.remove('selected');
+        });
+
+        // Reset search
+        searchInput.value = '';
 
         // Display all apartments
-        displayApartments(apartmentsData);
+        filterApartments();
     }
 
     function filterApartments() {
-        const priceIndex = parseInt(priceRangeInput.value);
-        const bedroomsVal = parseInt(bedroomsInput.value);
-        const bathroomsIndex = parseInt(bathroomsInput.value);
+        const minPrice = parseInt(priceMinInput.value);
+        const maxPrice = parseInt(priceMaxInput.value);
+        const searchText = searchInput.value.toLowerCase().trim();
 
         // Helper function to check if a listing matches filters
         function matchesFilters(listing) {
             // Filter by price
-            let priceMatch = true;
-            if (priceIndex !== 0) {
-                if (priceIndex === 1) {
-                    priceMatch = listing.price <= bounds[0];
-                } else if (priceIndex > 1 && priceIndex < 6) {
-                    const lower = bounds[priceIndex - 2];
-                    const upper = bounds[priceIndex - 1];
-                    priceMatch = listing.price > lower && listing.price <= upper;
-                } else if (priceIndex === 6) {
-                    priceMatch = listing.price >= bounds[5];
-                }
-            }
+            const priceMatch = listing.price >= minPrice && listing.price <= maxPrice;
 
             // Filter by bedrooms
             let bedroomMatch = true;
-            if (bedroomsVal !== 0) {
+            if (bedroomsCount !== 0) {
                 // Handle Studio listings
                 const beds = listing.beds === 'Studio' ? 0 : listing.beds;
-                if (bedroomsVal === 5) {
+                if (bedroomsCount === 5) {
                     bedroomMatch = beds >= 5;
                 } else {
-                    bedroomMatch = beds === bedroomsVal;
+                    bedroomMatch = beds === bedroomsCount;
                 }
             }
 
             // Filter by bathrooms
             let bathroomMatch = true;
-            if (bathroomsIndex !== 0) {
-                if (bathroomsIndex === 5) {
+            if (bathroomsCount !== 0) {
+                if (bathroomsCount === 5) {
                     bathroomMatch = listing.baths >= 5;
                 } else {
-                    bathroomMatch = listing.baths >= bathroomsIndex;
+                    bathroomMatch = listing.baths >= bathroomsCount;
                 }
             }
 
@@ -220,6 +277,14 @@ document.addEventListener('DOMContentLoaded', function() {
         let filteredApartments = [];
 
         apartmentsData.forEach(apartment => {
+            // First check if apartment matches search text
+            if (searchText) {
+                const nameMatch = apartment.name.toLowerCase().includes(searchText);
+                const locationMatch = apartment.location.toLowerCase().includes(searchText);
+                if (!nameMatch && !locationMatch) {
+                    return; // Skip this apartment if it doesn't match search
+                }
+            }
             if (apartment.floorPlans && apartment.floorPlans.length > 0) {
                 // For apartments with detailed floor plans, count how many match
                 const matchingFloorPlans = apartment.floorPlans.filter(floorPlan => {
@@ -299,37 +364,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Add click handler to navigate to detail page with current filter values
             card.addEventListener('click', function() {
-                const bedVal = parseInt(bedroomsInput.value);
-                const bathIndex = parseInt(bathroomsInput.value);
-                const priceIndex = parseInt(priceRangeInput.value);
+                const minPrice = parseInt(priceMinInput.value);
+                const maxPrice = parseInt(priceMaxInput.value);
 
                 // Build URL with apartment ID and filter parameters
                 let url = `apartment-detail.html?id=${apartment.id}`;
-                if (bedVal && bedVal !== 0) {
-                    if (bedVal === 5) url += `&beds=5+`;
-                    else url += `&beds=${bedVal}`;
+                if (bedroomsCount && bedroomsCount !== 0) {
+                    if (bedroomsCount === 5) url += `&beds=5+`;
+                    else url += `&beds=${bedroomsCount}`;
                 }
 
-                if (bathIndex && bathIndex !== 0) {
+                if (bathroomsCount && bathroomsCount !== 0) {
                     const bathMap = {1: '1', 2: '2', 3: '3', 4: '4', 5: '5+'};
-                    url += `&baths=${bathMap[bathIndex]}`;
+                    url += `&baths=${bathMap[bathroomsCount]}`;
                 }
 
-                // Add price range if a price filter is selected
-                if (priceIndex && priceIndex !== 0) {
-                    let priceParam = '';
-                    if (priceIndex === 1) {
-                        priceParam = `0-${bounds[0]}`;
-                    } else if (priceIndex > 1 && priceIndex < 6) {
-                        const lower = bounds[priceIndex - 2];
-                        const upper = bounds[priceIndex - 1];
-                        priceParam = `${lower}-${upper}`;
-                    } else if (priceIndex === 6) {
-                        priceParam = `${bounds[5]}-999999`;
-                    }
-                    if (priceParam) {
-                        url += `&price=${priceParam}`;
-                    }
+                // Add price range if not default (0 to max)
+                if (minPrice !== 0 || maxPrice !== roundedMaxPrice) {
+                    url += `&price=${minPrice}-${maxPrice}`;
                 }
 
                 window.location.href = url;
