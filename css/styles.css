@@ -304,7 +304,7 @@ section {
     padding: 0.75rem 2rem;
     width: max-content;
     /* animation uses a pixel distance set by JS (--scroll-distance) and a computed duration (--scroll-duration) */
-    animation: scroll-left var(--scroll-duration, 20s) linear infinite;
+    animation: scroll-left var(--scroll-duration, 40s) linear infinite;
     /* start paused until JS finishes building the track to avoid initial blanks */
     animation-play-state: paused;
 }
