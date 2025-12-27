@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Your website description">
+    <title>Nestd</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header class="college-header" id="collegeHeader">
+        <nav>
+            <div class="logo logo-combo">
+                <a href="home.html" class="nestd-logo-link">
+                    <img src="images/nestd-logo.png" alt="Nestd logo" class="nestd-logo" />
+                </a>
+                <span class="logo-separator">×</span>
+                <div class="college-logo-container">
+                    <img src="" alt="" class="college-logo-img" id="collegeLogo" />
+                </div>
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="home.html#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="home.html#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Search/Filter Section -->
+        <section id="search" class="search-section">
+            <div class="search-container">
+                <h1 id="pageTitle">Find Your Perfect Apartment</h1>
+                <p class="search-subtitle" id="pageSubtitle">Search through available apartments</p>
+
+                <!-- Search Bar and Filters Button -->
+                <div class="search-bar-container">
+                    <input
+                        type="text"
+                        id="searchInput"
+                        class="search-input"
+                        placeholder="Search apartments by name or location..."
+                    />
+                    <button id="filtersBtn" class="filters-btn">Filters</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filters Modal -->
+        <div id="filtersModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Filters</h2>
+                    <button id="closeModal" class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="filters sliders">
+                        <!-- Price Range Slider -->
+                        <div class="filter-group">
+                            <label for="priceRange">Price Range</label>
+                            <div class="dual-range-slider">
+                                <div class="slider-track"></div>
+                                <div class="slider-range" id="sliderRange"></div>
+                                <input type="range" id="priceMin" class="range-input range-min" min="0" max="3000" step="50" value="0" />
+                                <input type="range" id="priceMax" class="range-input range-max" min="0" max="3000" step="50" value="3000" />
+                            </div>
+                            <div class="price-bubbles">
+                                <div class="price-bubble price-bubble-min">
+                                    <span id="minPriceDisplay">$0</span>
+                                </div>
+                                <div class="price-bubble price-bubble-max">
+                                    <span id="maxPriceDisplay">$3,000</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bedrooms Counter -->
+                        <div class="filter-group">
+                            <label for="bedrooms">Bedrooms</label>
+                            <div class="counter-control">
+                                <button type="button" class="counter-btn" id="bedroomsDecrement">−</button>
+                                <span class="counter-value" id="bedroomsValue">Any</span>
+                                <button type="button" class="counter-btn" id="bedroomsIncrement">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Bathrooms Counter -->
+                        <div class="filter-group">
+                            <label for="bathrooms">Bathrooms</label>
+                            <div class="counter-control">
+                                <button type="button" class="counter-btn" id="bathroomsDecrement">−</button>
+                                <span class="counter-value" id="bathroomsValue">Any</span>
+                                <button type="button" class="counter-btn" id="bathroomsIncrement">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Amenities Filter -->
+                        <div class="filter-group">
+                            <label>Amenities</label>
+                            <div class="amenities-container" id="amenitiesContainer">
+                                <button type="button" class="amenity-option" data-amenity="gym">
+                                    <span class="amenity-icon">💪</span>
+                                    <span class="amenity-label">Gym</span>
+                                </button>
+                                <button type="button" class="amenity-option" data-amenity="pool">
+                                    <span class="amenity-icon">🏊</span>
+                                    <span class="amenity-label">Pool</span>
+                                </button>
+                                <button type="button" class="amenity-option" data-amenity="study">
+                                    <span class="amenity-icon">📚</span>
+                                    <span class="amenity-label">Study Area</span>
+                                </button>
+                                <button type="button" class="amenity-option" data-amenity="parking">
+                                    <span class="amenity-icon">🚗</span>
+                                    <span class="amenity-label">Parking</span>
+                                </button>
+                                <button type="button" class="amenity-option" data-amenity="laundry">
+                                    <span class="amenity-icon">🧺</span>
+                                    <span class="amenity-label">Laundry</span>
+                                </button>
+                                <button type="button" class="amenity-option" data-amenity="dishwasher">
+                                    <span class="amenity-icon">🍽️</span>
+                                    <span class="amenity-label">Dishwasher</span>
+                                </button>
+                                <button type="button" class="amenity-option" data-amenity="ac">
+                                    <span class="amenity-icon">❄️</span>
+                                    <span class="amenity-label">A/C</span>
+                                </button>
+                                <button type="button" class="amenity-option" data-amenity="pets">
+                                    <span class="amenity-icon">🐾</span>
+                                    <span class="amenity-label">Pet Friendly</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Reset Button -->
+                        <div class="filter-group">
+                            <label>&nbsp;</label>
+                            <button id="resetBtn" class="reset-btn">Reset Filters</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="applyFiltersBtn" class="apply-filters-btn">Apply Filters</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <section id="results" class="results-section">
+            <div class="results-header">
+                <h2>Available Apartments</h2>
+                <p id="resultsCount" class="results-count">Showing 10 apartments</p>
+            </div>
+
+            <div id="apartmentGrid" class="apartment-grid">
+                <!-- Apartment cards will be dynamically inserted here -->
+            </div>
+
+            <div id="noResults" class="no-results" style="display: none;">
+                <p>No apartments match your criteria. Try adjusting your filters.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; Maggie R Co. All rights reserved.</p>
+    </footer>
+
+    <script src="js/college-config.js"></script>
+    <script src="js/apartments-data.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

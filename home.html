@@ -38,43 +38,43 @@
             <div class="college-logos in-hero" aria-label="Colleges">
                 <div class="logo-scroller" aria-hidden="false">
                     <div class="scroller-track" aria-hidden="false">
-                        <a class="scroller-item" href="index.html?school=Indiana University" aria-label="Indiana University">
+                        <a class="scroller-item" href="college.html?college=indiana" aria-label="Indiana University">
                             <img src="images/logos/iu.svg" alt="Indiana University logo">
                             <span class="college-name visually-hidden">Indiana University</span>
                         </a>
-                        <a class="scroller-item" href="index.html?school=Purdue" aria-label="Purdue">
+                        <a class="scroller-item" href="college.html?college=purdue" aria-label="Purdue">
                             <img src="images/logos/purdue.png" alt="Purdue University logo">
                             <span class="college-name visually-hidden">Purdue</span>
                         </a>
-                        <a class="scroller-item" href="index.html?school=University of Illinois" aria-label="University of Illinois">
+                        <a class="scroller-item" href="college.html?college=illinois" aria-label="University of Illinois">
                             <img src="images/logos/illinois.png" alt="University of Illinois logo">
                             <span class="college-name visually-hidden">University of Illinois</span>
                         </a>
-                        <a class="scroller-item" href="index.html?school=University of Wisconsin Madison" aria-label="University of Wisconsin Madison">
+                        <a class="scroller-item" href="college.html?college=wisconsin" aria-label="University of Wisconsin Madison">
                             <img src="images/logos/uwmadison.svg" alt="University of Wisconsin Madison logo">
                             <span class="college-name visually-hidden">University of Wisconsin Madison</span>
                         </a>
-                        <a class="scroller-item" href="index.html?school=University of Michigan" aria-label="University of Michigan">
+                        <a class="scroller-item" href="college.html?college=michigan" aria-label="University of Michigan">
                             <img src="images/logos/umich.png" alt="University of Michigan logo">
                             <span class="college-name visually-hidden">University of Michigan</span>
                         </a>
-                        <a class="scroller-item" href="index.html?school=Ohio State University" aria-label="Ohio State University">
+                        <a class="scroller-item" href="college.html?college=osu" aria-label="Ohio State University">
                             <img src="images/logos/osu.png" alt="Ohio State University logo">
                             <span class="college-name visually-hidden">Ohio State University</span>
                         </a>
-                        <a class="scroller-item" href="index.html?school=Northwestern University" aria-label="Northwestern University">
+                        <a class="scroller-item" href="college.html?college=northwestern" aria-label="Northwestern University">
                             <img src="images/logos/northwestern.png" alt="Northwestern University logo">
                             <span class="college-name visually-hidden">Northwestern University</span>
                         </a>
-                        <a class="scroller-item" href="index.html?school=Michigan State University" aria-label="Michigan State University">
+                        <a class="scroller-item" href="college.html?college=msu" aria-label="Michigan State University">
                             <img src="images/logos/msu.svg" alt="Michigan State University logo">
                             <span class="college-name visually-hidden">Michigan State University</span>
                         </a>
-                        <a class="scroller-item" href="index.html?school=University of Notre Dame" aria-label="University of Notre Dame">
+                        <a class="scroller-item" href="college.html?college=notredame" aria-label="University of Notre Dame">
                             <img src="images/logos/notredame.png" alt="University of Notre Dame logo">
                             <span class="college-name visually-hidden">University of Notre Dame</span>
                         </a>
-                        <a class="scroller-item" href="index.html?school=University of Iowa" aria-label="University of Iowa">
+                        <a class="scroller-item" href="college.html?college=iowa" aria-label="University of Iowa">
                             <img src="images/logos/iowa.png" alt="University of Iowa logo">
                             <span class="college-name visually-hidden">University of Iowa</span>
                         </a>
@@ -190,22 +190,23 @@
         // Collect only the first set of items (ignore any intentionally-hidden duplicates if present)
         const initialItems = Array.from(track.querySelectorAll('.scroller-item')).filter(i => i.getAttribute('aria-hidden') !== 'true');
 
-        // Map to data objects (src + name)
+        // Map to data objects (src + name + href)
         const itemsData = initialItems.map(item => {
             const img = item.querySelector('img');
             const nameEl = item.querySelector('.college-name');
             const name = nameEl ? nameEl.textContent.trim() : (img ? (img.getAttribute('alt') || '').replace(/ logo$/i,'') : '');
-            return { src: img ? img.getAttribute('src') : null, name };
+            const href = item.getAttribute('href') || 'index.html';
+            return { src: img ? img.getAttribute('src') : null, name, href };
         }).filter(d => d.src);
 
         // Clear current track while we load and validate images
         track.innerHTML = '';
 
         // Helper: create a scroller anchor element
-        function makeItem(src, name) {
+        function makeItem(src, name, href) {
             const a = document.createElement('a');
             a.className = 'scroller-item';
-            a.href = name ? `index.html?school=${encodeURIComponent(name)}` : 'index.html';
+            a.href = href || 'index.html';
             a.setAttribute('aria-label', name || '');
 
             const img = document.createElement('img');
@@ -244,11 +245,11 @@
             }
 
             // Append the validated set
-            valid.forEach(v => track.appendChild(makeItem(v.src, v.name)));
+            valid.forEach(v => track.appendChild(makeItem(v.src, v.name, v.href)));
 
             // Duplicate the same set for seamless looping
             valid.forEach(v => {
-                const clone = makeItem(v.src, v.name);
+                const clone = makeItem(v.src, v.name, v.href);
                 clone.setAttribute('aria-hidden', 'true');
                 track.appendChild(clone);
             });
