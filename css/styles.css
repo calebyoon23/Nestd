@@ -32,7 +32,7 @@ header {
     color: var(--text);
 
     /* keep header from growing when logo grows */
-    height: 64px;
+    height: 80px;
     padding: 0;
 
     position: sticky;
@@ -1327,9 +1327,14 @@ footer {
 /* Hero Section */
 .detail-hero {
     position: relative;
-    width: 100%;
-    height: 400px;
+    width: 100vw;
+    height: 700px;
     overflow: hidden;
+
+    /* Break out of parent container to stretch full width */
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    margin-top: -4rem; /* Remove top padding from main element */
 }
 
 .hero-image {
@@ -1344,16 +1349,15 @@ footer {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6));
     display: flex;
     align-items: flex-end;
-    padding: 2rem;
+    padding: 2rem; 
 }
 
 .hero-content {
     color: white;
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: 1200px; 
+    margin: 3rem 0;
     width: 100%;
 }
 
@@ -1375,10 +1379,30 @@ footer {
     padding: 0 1.5rem;
 }
 
+/* Map Section */
+.map-section {
+    padding: 3rem 0;
+    background: var(--bg);
+}
+
+.map-section h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.apartment-map {
+    width: 100%;
+    height: 400px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
 /* Reviews Section */
 .reviews-section {
     padding: 3rem 0;
-    background: var(--bg);
+    background: var(--surface);
 }
 
 .reviews-section h2 {
@@ -1642,11 +1666,17 @@ footer {
         padding: 1.5rem;
     }
 
+    .map-section,
     .reviews-section,
     .floor-plans-section {
         padding: 2rem 0;
     }
 
+    .apartment-map {
+        height: 300px;
+    }
+
+    .map-section h2,
     .reviews-section h2,
     .floor-plans-section h2 {
         font-size: 1.5rem;

@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize the page
     displayHeroSection(apartment);
+    displayMap(apartment);
     displayReviews(apartment);
     displayFloorPlans(apartment, filterBeds, filterBaths, filterPrice);
     setupFloorPlanFilters();
@@ -33,6 +34,73 @@ function displayHeroSection(apartment) {
 
     // Update page title
     document.title = `${apartment.name} - Nestd`;
+}
+
+function displayMap(apartment) {
+    // Display the address
+    document.getElementById('mapAddress').textContent = apartment.location;
+
+    // Set your Mapbox access token
+    mapboxgl.accessToken = 'pk.eyJ1IjoieW9vbnN0ZXIyMyIsImEiOiJjbWpwMmJsaHkyM2FvM2RveWxybTNrZm84In0.YmXS_KEOZeRxGTLjPNS5Fg';
+
+    // Use Mapbox Geocoding API to get coordinates from address
+    const geocodeUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(apartment.location)}.json?access_token=${mapboxgl.accessToken}`;
+
+    fetch(geocodeUrl)
+        .then(response => response.json())
+        .then(data => {
+            if (data.features && data.features.length > 0) {
+                const [lng, lat] = data.features[0].center;
+
+                // Initialize the map
+                const map = new mapboxgl.Map({
+                    container: 'map',
+                    style: 'mapbox://styles/mapbox/streets-v12', // Clean streets style
+                    center: [lng, lat],
+                    zoom: 15
+                });
+
+                // Add navigation controls (zoom buttons)
+                map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+                // Add full screen control
+                map.addControl(new mapboxgl.FullscreenControl(), 'top-right');
+
+                // Create a popup
+                const popup = new mapboxgl.Popup({ offset: 25 })
+                    .setHTML(`<div style="padding: 8px;"><strong>${apartment.name}</strong><br>${apartment.location}</div>`);
+
+                // Add a marker with popup
+                const marker = new mapboxgl.Marker({ color: '#990000' }) // IU crimson color
+                    .setLngLat([lng, lat])
+                    .setPopup(popup)
+                    .addTo(map);
+
+                // Open popup by default
+                marker.togglePopup();
+            } else {
+                console.error('Geocoding failed: No results found');
+                // Fallback to Bloomington, IN
+                initializeFallbackMap();
+            }
+        })
+        .catch(error => {
+            console.error('Geocoding error:', error);
+            // Fallback to Bloomington, IN
+            initializeFallbackMap();
+        });
+
+    function initializeFallbackMap() {
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v12',
+            center: [-86.5264, 39.1653], // Bloomington, IN
+            zoom: 13
+        });
+
+        map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+        map.addControl(new mapboxgl.FullscreenControl(), 'top-right');
+    }
 }
 
 function displayReviews(apartment) {
