@@ -5,6 +5,7 @@ const collegeConfig = {
         fullName: 'Indiana University',
         headerClass: 'iu-header',
         logo: 'images/logos/iu.svg',
+        nestdLogo: 'images/Nestd logo white.png',
         title: 'Find Your Perfect IU Apartment',
         subtitle: 'Search through available apartments near Indiana University'
     },
@@ -13,6 +14,7 @@ const collegeConfig = {
         fullName: 'Purdue University',
         headerClass: 'purdue-header',
         logo: 'images/logos/purdue.png',
+        nestdLogo: 'images/Nestd logo white.png',
         title: 'Find Your Nest at Purdue',
         subtitle: 'Search through available apartments near Purdue University'
     },
@@ -21,6 +23,7 @@ const collegeConfig = {
         fullName: 'University of Illinois',
         headerClass: 'illinois-header',
         logo: 'images/logos/illinois.png',
+        nestdLogo: 'images/Nestd logo white.png',
         title: 'Find Your Nest at Illinois',
         subtitle: 'Search through available apartments near University of Illinois'
     },
@@ -29,6 +32,7 @@ const collegeConfig = {
         fullName: 'University of Wisconsin Madison',
         headerClass: 'wisconsin-header',
         logo: 'images/logos/uwmadison.svg',
+        nestdLogo: 'images/Nestd logo white.png',
         title: 'Find Your Nest at Wisconsin',
         subtitle: 'Search through available apartments near University of Wisconsin Madison'
     },
@@ -37,6 +41,7 @@ const collegeConfig = {
         fullName: 'University of Michigan',
         headerClass: 'michigan-header',
         logo: 'images/logos/umich.png',
+        nestdLogo: 'images/Nestd logo white.png',
         title: 'Find Your Nest at Michigan',
         subtitle: 'Search through available apartments near University of Michigan'
     },
@@ -45,6 +50,7 @@ const collegeConfig = {
         fullName: 'Ohio State University',
         headerClass: 'osu-header',
         logo: 'images/logos/osu.png',
+        nestdLogo: 'images/Nestd logo white.png',
         title: 'Find Your Nest at Ohio State',
         subtitle: 'Search through available apartments near Ohio State University'
     },
@@ -53,6 +59,7 @@ const collegeConfig = {
         fullName: 'Northwestern University',
         headerClass: 'northwestern-header',
         logo: 'images/logos/northwestern.png',
+        nestdLogo: 'images/Nestd logo white.png',
         title: 'Find Your Nest at Northwestern',
         subtitle: 'Search through available apartments near Northwestern University'
     },
@@ -61,6 +68,7 @@ const collegeConfig = {
         fullName: 'Michigan State University',
         headerClass: 'msu-header',
         logo: 'images/logos/msu.svg',
+        nestdLogo: 'images/Nestd logo white.png',
         title: 'Find Your Nest at Michigan State',
         subtitle: 'Search through available apartments near Michigan State University'
     },
@@ -69,6 +77,7 @@ const collegeConfig = {
         fullName: 'University of Notre Dame',
         headerClass: 'notredame-header',
         logo: 'images/logos/notredame.png',
+        nestdLogo: 'images/Nestd logo white.png',
         title: 'Find Your Nest at Notre Dame',
         subtitle: 'Search through available apartments near University of Notre Dame'
     },
@@ -77,6 +86,7 @@ const collegeConfig = {
         fullName: 'University of Iowa',
         headerClass: 'iowa-header',
         logo: 'images/logos/iowa.png',
+        nestdLogo: 'images/Nestd logo white.png',
         title: 'Find Your Nest at Iowa',
         subtitle: 'Search through available apartments near University of Iowa'
     }
@@ -98,6 +108,10 @@ document.addEventListener('DOMContentLoaded', function() {
         header.classList.add(config.headerClass);
 
         // Update logo
+        const nestdLogo = document.querySelector('.nestd-logo');
+        if (nestdLogo) {
+            nestdLogo.src = config.nestdLogo || 'images/nestd-logo.png';
+        }
         const logo = document.getElementById('collegeLogo');
         logo.src = config.logo;
         logo.alt = `${config.fullName} logo`;
