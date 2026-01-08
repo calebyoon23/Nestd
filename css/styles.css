@@ -53,6 +53,36 @@ header.iu-header {
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }  
 
+header.purdue-header { background-color: #000000; border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
+header.illinois-header { background-color: #e84a27; border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
+header.wisconsin-header { background-color: #c5050c; border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
+header.michigan-header { background-color: #00274c; border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
+header.osu-header { background-color: #bb0000; border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
+header.northwestern-header { background-color: #4e2a84; border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
+header.msu-header { background-color: #18453b; border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
+header.notredame-header { background-color: #0c2340; border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
+header.iowa-header { background-color: #000000; border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
+
+/* Keep college logo combo contained within the header height */
+header.college-header .nestd-logo-link {
+    height: 100%;
+    align-items: center;
+}
+
+header.college-header .nestd-logo {
+    height: 128px;
+    max-height: none;
+}
+
+header.college-header .college-logo-container {
+    height: 100%;
+}
+
+header.college-header .college-logo-img {
+    height: 40px;
+    max-height: 100%;
+}
+
 nav {
     /* full-width so logo can be truly flush left */
     width: 100%;
