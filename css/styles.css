@@ -53,25 +53,15 @@ header.iu-header {
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }  
 
-header.purdue-header { background-color: #000000; border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
-header.illinois-header { background-color: #e84a27; border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
-header.wisconsin-header { background-color: #c5050c; border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
-header.michigan-header { background-color: #00274c; border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
-header.osu-header { background-color: #bb0000; border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
-header.northwestern-header { background-color: #4e2a84; border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
-header.msu-header { background-color: #18453b; border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
-header.notredame-header { background-color: #0c2340; border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
-header.iowa-header { background-color: #000000; border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
-
 /* Keep college logo combo contained within the header height */
+header.college-header .logo img {
+    height: 64px;
+    max-height: 100%;
+}
+
 header.college-header .nestd-logo-link {
     height: 100%;
     align-items: center;
-}
-
-header.college-header .nestd-logo {
-    height: 128px;
-    max-height: none;
 }
 
 header.college-header .college-logo-container {
@@ -368,6 +358,63 @@ section {
 
 /* Give the hero extra bottom padding so document flow accounts for the scroller height */
 .home-hero { padding-bottom: 90px; }
+
+.home-search {
+    position: relative;
+    margin: -30px auto 0;
+    width: min(620px, 92vw);
+    z-index: 40;
+}
+
+.home-search-form {
+    position: relative;
+}
+
+.home-search-input {
+    width: 100%;
+    padding: 0.95rem 1.15rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(0, 0, 0, 0.55);
+    color: #ffffff;
+    font-size: 1rem;
+    letter-spacing: 0.2px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+.home-search-input::placeholder {
+    color: rgba(255,255,255,0.7);
+}
+
+.home-search-input:focus {
+    outline: none;
+    border-color: rgba(255,255,255,0.7);
+    box-shadow: 0 12px 34px rgba(0,0,0,0.35);
+    background: rgba(0, 0, 0, 0.65);
+}
+
+.home-search .suggestions {
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: rgba(20, 20, 20, 0.92);
+    color: #ffffff;
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 14px 36px rgba(0,0,0,0.35);
+    backdrop-filter: blur(10px);
+}
+
+.home-search .suggestions li {
+    padding: 0.7rem 1rem;
+}
+
+.home-search .suggestions li:hover,
+.home-search .suggestions li[aria-selected="true"],
+.home-search .suggestions li.selected {
+    background: rgba(255,255,255,0.12);
+}
 
 
 @media (max-width: 768px) {

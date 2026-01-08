@@ -84,18 +84,26 @@
 
         </section>
 
-
-
-        <!-- University search -->
-        <section class="university-search" aria-label="Search for your university">
-            <div class="search-box">
-                <form id="uniSearchForm" action="index.html" method="get">
-                    <label for="universitySearch" class="visually-hidden">Search for university</label>
-                    <input id="universitySearch" name="school" type="search" placeholder="Search for your university (e.g. Indiana University)" aria-label="Search for your university">
-                    <button type="submit" class="search-btn">Search</button>
-                </form>
-            </div>
+        <section class="home-search" aria-label="Search for a school">
+            <form class="home-search-form" action="#" method="get" autocomplete="off">
+                <label for="homeSchoolSearch" class="visually-hidden">Search for a school</label>
+                <input
+                    id="homeSchoolSearch"
+                    class="home-search-input"
+                    type="search"
+                    placeholder="Search your school"
+                    aria-expanded="false"
+                    aria-controls="homeSchoolResults"
+                />
+                <ul id="homeSchoolResults" class="suggestions" role="listbox" hidden></ul>
+            </form>
         </section>
+        </main>
+        <br> </br>
+        <br> </br>
+        <br> </br>
+
+
 
         <!-- About Section -->
         <section id="about" class="about-section" aria-label="About Nestd">
@@ -283,6 +291,71 @@
             notice.textContent = 'Thanks — we will get back to you shortly.';
             notice.style.color = 'green';
             contactForm.reset();
+        });
+    });
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('homeSchoolSearch');
+        const results = document.getElementById('homeSchoolResults');
+        if (!input || !results) return;
+
+        const schools = [
+            'Indiana University',
+            'Purdue University',
+            'University of Illinois Urbana-Champaign',
+            'University of Wisconsin Madison',
+            'University of Michigan',
+            'Ohio State University',
+            'Northwestern University',
+            'Michigan State University',
+            'University of Notre Dame',
+            'University of Iowa'
+        ];
+
+        function renderResults(matches) {
+            results.innerHTML = '';
+            if (matches.length === 0) {
+                results.hidden = true;
+                input.setAttribute('aria-expanded', 'false');
+                return;
+            }
+
+            matches.forEach((name) => {
+                const li = document.createElement('li');
+                li.textContent = name;
+                li.setAttribute('role', 'option');
+                li.addEventListener('click', () => {
+                    input.value = name;
+                    results.hidden = true;
+                    input.setAttribute('aria-expanded', 'false');
+                });
+                results.appendChild(li);
+            });
+
+            results.hidden = false;
+            input.setAttribute('aria-expanded', 'true');
+        }
+
+        input.addEventListener('input', () => {
+            const query = input.value.trim().toLowerCase();
+            if (!query) {
+                renderResults([]);
+                return;
+            }
+
+            const matches = schools.filter((name) =>
+                name.toLowerCase().startsWith(query)
+            );
+            renderResults(matches);
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!results.contains(event.target) && event.target !== input) {
+                results.hidden = true;
+                input.setAttribute('aria-expanded', 'false');
+            }
         });
     });
     </script>
